@@ -1,0 +1,3 @@
+[submodule "eladmin-web"]
+	path = eladmin-web
+	url = git@github.com:piaohao/eladmin-web.git
