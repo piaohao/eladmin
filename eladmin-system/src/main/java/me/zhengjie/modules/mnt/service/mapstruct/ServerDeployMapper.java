@@ -16,7 +16,7 @@
 package me.zhengjie.modules.mnt.service.mapstruct;
 
 import me.zhengjie.base.BaseMapper;
-import me.zhengjie.modules.mnt.domain.ServerDeploy;
+import me.zhengjie.api.domain.mnt.ServerDeploy;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

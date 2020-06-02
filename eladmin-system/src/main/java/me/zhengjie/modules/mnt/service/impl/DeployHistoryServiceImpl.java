@@ -17,8 +17,8 @@ package me.zhengjie.modules.mnt.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.mnt.domain.DeployHistory;
-import me.zhengjie.modules.mnt.repository.DeployHistoryRepository;
+import me.zhengjie.api.domain.mnt.DeployHistory;
+import me.zhengjie.api.repository.mnt.DeployHistoryRepository;
 import me.zhengjie.modules.mnt.service.DeployHistoryService;
 import me.zhengjie.modules.mnt.service.dto.DeployHistoryDto;
 import me.zhengjie.modules.mnt.service.dto.DeployHistoryQueryCriteria;

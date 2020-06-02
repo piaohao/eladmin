@@ -16,8 +16,8 @@
 package me.zhengjie.modules.quartz.config;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.quartz.domain.QuartzJob;
-import me.zhengjie.modules.quartz.repository.QuartzJobRepository;
+import me.zhengjie.api.domain.task.QuartzJob;
+import me.zhengjie.api.repository.task.QuartzJobRepository;
 import me.zhengjie.modules.quartz.utils.QuartzManage;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

@@ -16,8 +16,8 @@
 package me.zhengjie.modules.mnt.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.mnt.domain.ServerDeploy;
-import me.zhengjie.modules.mnt.repository.ServerDeployRepository;
+import me.zhengjie.api.domain.mnt.ServerDeploy;
+import me.zhengjie.api.repository.mnt.ServerDeployRepository;
 import me.zhengjie.modules.mnt.service.ServerDeployService;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;

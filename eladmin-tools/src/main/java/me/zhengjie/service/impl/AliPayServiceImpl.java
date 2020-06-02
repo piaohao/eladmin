@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.domain.vo.TradeVo;
 import me.zhengjie.domain.AlipayConfig;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.repository.AliPayRepository;
+import me.zhengjie.api.repository.tools.AliPayRepository;
 import me.zhengjie.service.AliPayService;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;

@@ -15,8 +15,8 @@
  */
 package me.zhengjie.modules.system.service.mapstruct;
 
+import me.zhengjie.api.domain.system.User;
 import me.zhengjie.base.BaseMapper;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.modules.system.service.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

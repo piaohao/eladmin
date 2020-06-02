@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.quartz.domain.QuartzJob;
+import me.zhengjie.api.domain.task.QuartzJob;
 import me.zhengjie.modules.quartz.service.QuartzJobService;
 import me.zhengjie.modules.quartz.service.dto.JobQueryCriteria;
 import org.springframework.data.domain.Pageable;

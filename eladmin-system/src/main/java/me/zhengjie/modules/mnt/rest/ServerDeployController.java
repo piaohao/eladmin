@@ -19,7 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
-import me.zhengjie.modules.mnt.domain.ServerDeploy;
+import me.zhengjie.api.domain.mnt.ServerDeploy;
 import me.zhengjie.modules.mnt.service.ServerDeployService;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;
 import org.springframework.data.domain.Pageable;

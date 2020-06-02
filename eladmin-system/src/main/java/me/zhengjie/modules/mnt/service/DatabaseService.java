@@ -15,7 +15,7 @@
  */
 package me.zhengjie.modules.mnt.service;
 
-import me.zhengjie.modules.mnt.domain.Database;
+import me.zhengjie.api.domain.mnt.Database;
 import me.zhengjie.modules.mnt.service.dto.DatabaseDto;
 import me.zhengjie.modules.mnt.service.dto.DatabaseQueryCriteria;
 import org.springframework.data.domain.Pageable;

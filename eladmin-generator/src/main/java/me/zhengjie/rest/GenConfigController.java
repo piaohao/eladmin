@@ -18,7 +18,7 @@ package me.zhengjie.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.domain.GenConfig;
+import me.zhengjie.api.domain.generator.GenConfig;
 import me.zhengjie.service.GenConfigService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -24,7 +24,7 @@ import me.zhengjie.service.dto.LocalStorageQueryCriteria;
 import me.zhengjie.service.mapstruct.LocalStorageMapper;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.utils.*;
-import me.zhengjie.repository.LocalStorageRepository;
+import me.zhengjie.api.repository.tools.LocalStorageRepository;
 import me.zhengjie.service.LocalStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

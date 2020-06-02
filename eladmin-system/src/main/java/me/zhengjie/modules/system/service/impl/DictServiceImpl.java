@@ -21,7 +21,7 @@ import me.zhengjie.modules.system.domain.Dict;
 import me.zhengjie.modules.system.service.dto.DictDetailDto;
 import me.zhengjie.modules.system.service.dto.DictQueryCriteria;
 import me.zhengjie.utils.*;
-import me.zhengjie.modules.system.repository.DictRepository;
+import me.zhengjie.api.repository.system.DictRepository;
 import me.zhengjie.modules.system.service.DictService;
 import me.zhengjie.modules.system.service.dto.DictDto;
 import me.zhengjie.modules.system.service.mapstruct.DictMapper;

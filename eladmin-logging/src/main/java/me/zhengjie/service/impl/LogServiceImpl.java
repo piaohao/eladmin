@@ -20,7 +20,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.domain.Log;
-import me.zhengjie.repository.LogRepository;
+import me.zhengjie.api.repository.logging.LogRepository;
 import me.zhengjie.service.LogService;
 import me.zhengjie.service.dto.LogQueryCriteria;
 import me.zhengjie.service.mapstruct.LogErrorMapper;

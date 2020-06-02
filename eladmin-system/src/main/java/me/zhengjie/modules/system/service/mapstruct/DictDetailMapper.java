@@ -15,8 +15,8 @@
  */
 package me.zhengjie.modules.system.service.mapstruct;
 
+import me.zhengjie.api.domain.system.DictDetail;
 import me.zhengjie.base.BaseMapper;
-import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.service.dto.DictDetailDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

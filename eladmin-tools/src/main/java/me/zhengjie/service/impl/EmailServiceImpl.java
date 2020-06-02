@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.domain.EmailConfig;
 import me.zhengjie.domain.vo.EmailVo;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.repository.EmailRepository;
+import me.zhengjie.api.repository.tools.EmailRepository;
 import me.zhengjie.service.EmailService;
 import me.zhengjie.utils.EncryptUtils;
 import org.springframework.cache.annotation.CacheConfig;

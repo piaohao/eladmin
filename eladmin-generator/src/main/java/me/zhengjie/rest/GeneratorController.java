@@ -18,7 +18,7 @@ package me.zhengjie.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.domain.ColumnInfo;
+import me.zhengjie.api.domain.generator.ColumnInfo;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.service.GenConfigService;
 import me.zhengjie.service.GeneratorService;

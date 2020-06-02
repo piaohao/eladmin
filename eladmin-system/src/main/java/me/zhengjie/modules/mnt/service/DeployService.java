@@ -15,8 +15,8 @@
  */
 package me.zhengjie.modules.mnt.service;
 
-import me.zhengjie.modules.mnt.domain.Deploy;
-import me.zhengjie.modules.mnt.domain.DeployHistory;
+import me.zhengjie.api.domain.mnt.Deploy;
+import me.zhengjie.api.domain.mnt.DeployHistory;
 import me.zhengjie.modules.mnt.service.dto.DeployDto;
 import me.zhengjie.modules.mnt.service.dto.DeployQueryCriteria;
 import org.springframework.data.domain.Pageable;

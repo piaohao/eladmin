@@ -23,7 +23,7 @@ import com.alibaba.fastjson.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.domain.Picture;
-import me.zhengjie.repository.PictureRepository;
+import me.zhengjie.api.repository.tools.PictureRepository;
 import me.zhengjie.service.PictureService;
 import me.zhengjie.service.dto.PictureQueryCriteria;
 import me.zhengjie.exception.BadRequestException;

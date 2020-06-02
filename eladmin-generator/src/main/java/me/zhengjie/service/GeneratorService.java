@@ -15,8 +15,8 @@
  */
 package me.zhengjie.service;
 
-import me.zhengjie.domain.GenConfig;
-import me.zhengjie.domain.ColumnInfo;
+import me.zhengjie.api.domain.generator.ColumnInfo;
+import me.zhengjie.api.domain.generator.GenConfig;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import javax.servlet.http.HttpServletRequest;

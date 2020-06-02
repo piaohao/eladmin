@@ -16,6 +16,11 @@
     <name>公共模块</name>
 
     <dependencies>
+        <dependency>
+            <groupId>me.zhengjie</groupId>
+            <artifactId>eladmin-api</artifactId>
+            <version>2.4</version>
+        </dependency>
         <!--工具包-->
         <dependency>
             <groupId>cn.hutool</groupId>

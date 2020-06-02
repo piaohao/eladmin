@@ -17,8 +17,8 @@ package me.zhengjie.modules.mnt.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.mnt.domain.App;
-import me.zhengjie.modules.mnt.repository.AppRepository;
+import me.zhengjie.api.domain.mnt.App;
+import me.zhengjie.api.repository.mnt.AppRepository;
 import me.zhengjie.modules.mnt.service.AppService;
 import me.zhengjie.modules.mnt.service.dto.AppDto;
 import me.zhengjie.modules.mnt.service.dto.AppQueryCriteria;

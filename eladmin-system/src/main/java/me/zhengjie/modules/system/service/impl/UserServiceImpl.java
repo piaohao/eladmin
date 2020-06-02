@@ -20,7 +20,7 @@ import me.zhengjie.config.FileProperties;
 import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
-import me.zhengjie.modules.system.repository.UserRepository;
+import me.zhengjie.api.repository.system.UserRepository;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.JobSmallDto;
 import me.zhengjie.modules.system.service.dto.RoleSmallDto;

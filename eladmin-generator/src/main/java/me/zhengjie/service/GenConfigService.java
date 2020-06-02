@@ -15,7 +15,8 @@
  */
 package me.zhengjie.service;
 
-import me.zhengjie.domain.GenConfig;
+
+import me.zhengjie.api.domain.generator.GenConfig;
 
 /**
  * @author Zheng Jie
