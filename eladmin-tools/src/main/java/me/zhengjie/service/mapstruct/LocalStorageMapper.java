@@ -15,9 +15,9 @@
  */
 package me.zhengjie.service.mapstruct;
 
+import me.zhengjie.api.domain.tools.LocalStorage;
 import me.zhengjie.base.BaseMapper;
 import me.zhengjie.service.dto.LocalStorageDto;
-import me.zhengjie.domain.LocalStorage;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

@@ -16,8 +16,8 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.Dict;
-import me.zhengjie.modules.system.domain.DictDetail;
+import me.zhengjie.api.domain.system.Dict;
+import me.zhengjie.api.domain.system.DictDetail;
 import me.zhengjie.api.repository.system.DictRepository;
 import me.zhengjie.modules.system.service.dto.DictDetailQueryCriteria;
 import me.zhengjie.utils.PageUtil;

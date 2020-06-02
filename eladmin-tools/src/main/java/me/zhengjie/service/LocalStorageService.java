@@ -15,7 +15,7 @@
  */
 package me.zhengjie.service;
 
-import me.zhengjie.domain.LocalStorage;
+import me.zhengjie.api.domain.tools.LocalStorage;
 import me.zhengjie.service.dto.LocalStorageDto;
 import me.zhengjie.service.dto.LocalStorageQueryCriteria;
 import org.springframework.data.domain.Pageable;

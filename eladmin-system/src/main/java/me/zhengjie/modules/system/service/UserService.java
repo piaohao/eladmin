@@ -15,7 +15,7 @@
  */
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.api.domain.system.User;
 import me.zhengjie.modules.system.service.dto.UserDto;
 import me.zhengjie.modules.system.service.dto.UserQueryCriteria;
 import org.springframework.data.domain.Pageable;

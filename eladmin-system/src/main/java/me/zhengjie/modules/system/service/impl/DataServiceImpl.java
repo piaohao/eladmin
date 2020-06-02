@@ -16,7 +16,7 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.api.domain.system.Dept;
 import me.zhengjie.modules.system.service.DataService;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.RoleService;

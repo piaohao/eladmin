@@ -15,7 +15,7 @@
  */
 package me.zhengjie.service;
 
-import me.zhengjie.domain.Log;
+import me.zhengjie.api.domain.logging.Log;
 import me.zhengjie.service.dto.LogQueryCriteria;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.data.domain.Pageable;

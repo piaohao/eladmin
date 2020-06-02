@@ -15,7 +15,7 @@
  */
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.Menu;
+import me.zhengjie.api.domain.system.Menu;
 import me.zhengjie.modules.system.service.dto.MenuDto;
 import me.zhengjie.modules.system.service.dto.MenuQueryCriteria;
 

@@ -15,7 +15,7 @@
  */
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.DictDetail;
+import me.zhengjie.api.domain.system.DictDetail;
 import me.zhengjie.modules.system.service.dto.DictDetailDto;
 import me.zhengjie.modules.system.service.dto.DictDetailQueryCriteria;
 import org.springframework.data.domain.Pageable;

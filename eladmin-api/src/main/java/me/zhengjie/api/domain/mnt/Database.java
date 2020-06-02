@@ -16,8 +16,6 @@
 package me.zhengjie.api.domain.mnt;
 
 import io.swagger.annotations.ApiModelProperty;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Getter;
 import lombok.Setter;
 import me.zhengjie.api.domain.BaseEntity;
@@ -51,7 +49,7 @@ public class Database extends BaseEntity implements Serializable {
 	@ApiModelProperty(value = "用户名")
     private String userName;
 
-    public void copy(Database source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
+//    public void copy(Database source){
+//        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+//    }
 }

@@ -19,7 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
-import me.zhengjie.domain.Picture;
+import me.zhengjie.api.domain.tools.Picture;
 import me.zhengjie.service.PictureService;
 import me.zhengjie.service.dto.PictureQueryCriteria;
 import me.zhengjie.utils.SecurityUtils;

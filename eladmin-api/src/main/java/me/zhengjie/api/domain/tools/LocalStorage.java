@@ -17,9 +17,8 @@ package me.zhengjie.api.domain.tools;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import me.zhengjie.base.BaseEntity;
+import me.zhengjie.api.domain.BaseEntity;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -67,7 +66,7 @@ public class LocalStorage extends BaseEntity implements Serializable {
         this.size = size;
     }
 
-    public void copy(LocalStorage source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
+//    public void copy(LocalStorage source){
+//        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+//    }
 }

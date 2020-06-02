@@ -19,8 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import me.zhengjie.base.BaseEntity;
-import me.zhengjie.utils.enums.DataScopeEnum;
+import me.zhengjie.api.domain.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -71,7 +70,8 @@ public class Role extends BaseEntity implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "数据权限，全部 、 本级 、 自定义")
-    private String dataScope = DataScopeEnum.THIS_LEVEL.getValue();
+    //private String dataScope = DataScopeEnum.THIS_LEVEL.getValue();
+    private String dataScope;
 
     @Column(name = "level")
     @ApiModelProperty(value = "级别，数值越小，级别越大")

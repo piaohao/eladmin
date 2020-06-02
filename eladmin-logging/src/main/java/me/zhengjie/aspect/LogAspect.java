@@ -16,7 +16,7 @@
 package me.zhengjie.aspect;
 
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.domain.Log;
+import me.zhengjie.api.domain.logging.Log;
 import me.zhengjie.service.LogService;
 import me.zhengjie.utils.RequestHolder;
 import me.zhengjie.utils.SecurityUtils;

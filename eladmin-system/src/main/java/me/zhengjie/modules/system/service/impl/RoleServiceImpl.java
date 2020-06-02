@@ -16,11 +16,11 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.api.domain.system.Menu;
+import me.zhengjie.api.domain.system.Role;
+import me.zhengjie.api.domain.system.User;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.system.domain.Menu;
-import me.zhengjie.modules.system.domain.Role;
 import me.zhengjie.exception.EntityExistException;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.api.repository.system.RoleRepository;
 import me.zhengjie.api.repository.system.UserRepository;
 import me.zhengjie.modules.system.service.RoleService;

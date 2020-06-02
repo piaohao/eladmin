@@ -15,8 +15,8 @@
  */
 package me.zhengjie.service;
 
-import me.zhengjie.domain.QiniuConfig;
-import me.zhengjie.domain.QiniuContent;
+import me.zhengjie.api.domain.tools.QiniuConfig;
+import me.zhengjie.api.domain.tools.QiniuContent;
 import me.zhengjie.service.dto.QiniuQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

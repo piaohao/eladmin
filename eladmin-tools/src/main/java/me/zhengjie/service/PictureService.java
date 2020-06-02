@@ -15,7 +15,7 @@
  */
 package me.zhengjie.service;
 
-import me.zhengjie.domain.Picture;
+import me.zhengjie.api.domain.tools.Picture;
 import me.zhengjie.service.dto.PictureQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

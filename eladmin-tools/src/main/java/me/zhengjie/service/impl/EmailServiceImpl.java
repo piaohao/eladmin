@@ -18,7 +18,7 @@ package me.zhengjie.service.impl;
 import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.domain.EmailConfig;
+import me.zhengjie.api.domain.tools.EmailConfig;
 import me.zhengjie.domain.vo.EmailVo;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.api.repository.tools.EmailRepository;

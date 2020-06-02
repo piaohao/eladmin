@@ -16,8 +16,6 @@
 package me.zhengjie.api.domain.mnt;
 
 import io.swagger.annotations.ApiModelProperty;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Getter;
 import lombok.Setter;
 import me.zhengjie.api.domain.BaseEntity;
@@ -61,7 +59,7 @@ public class App extends BaseEntity implements Serializable {
 	@ApiModelProperty(value = "部署脚本")
 	private String deployScript;
 
-    public void copy(App source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
+//    public void copy(App source){
+//        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+//    }
 }

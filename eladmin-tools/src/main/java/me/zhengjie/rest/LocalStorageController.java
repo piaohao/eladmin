@@ -17,7 +17,7 @@ package me.zhengjie.rest;
 
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
-import me.zhengjie.domain.LocalStorage;
+import me.zhengjie.api.domain.tools.LocalStorage;
 import me.zhengjie.service.LocalStorageService;
 import me.zhengjie.service.dto.LocalStorageQueryCriteria;
 import org.springframework.data.domain.Pageable;

@@ -18,7 +18,8 @@ package me.zhengjie.api.domain.system;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import me.zhengjie.base.BaseEntity;
+import me.zhengjie.api.domain.BaseEntity;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;

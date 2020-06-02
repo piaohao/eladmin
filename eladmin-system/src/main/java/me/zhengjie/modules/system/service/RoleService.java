@@ -15,7 +15,7 @@
  */
 package me.zhengjie.modules.system.service;
 
-import me.zhengjie.modules.system.domain.Role;
+import me.zhengjie.api.domain.system.Role;
 import me.zhengjie.modules.system.service.dto.RoleDto;
 import me.zhengjie.modules.system.service.dto.RoleQueryCriteria;
 import me.zhengjie.modules.system.service.dto.RoleSmallDto;

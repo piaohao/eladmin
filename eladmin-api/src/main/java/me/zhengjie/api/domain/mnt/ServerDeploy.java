@@ -16,8 +16,6 @@
 package me.zhengjie.api.domain.mnt;
 
 import io.swagger.annotations.ApiModelProperty;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Getter;
 import lombok.Setter;
 import me.zhengjie.api.domain.BaseEntity;
@@ -56,9 +54,9 @@ public class ServerDeploy extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "密码")
     private String password;
 
-    public void copy(ServerDeploy source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
+//    public void copy(ServerDeploy source){
+//        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+//    }
 
     @Override
     public boolean equals(Object o) {

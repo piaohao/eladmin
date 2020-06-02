@@ -16,9 +16,9 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.api.domain.system.Job;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.exception.EntityExistException;
-import me.zhengjie.modules.system.domain.Job;
 import me.zhengjie.api.repository.system.UserRepository;
 import me.zhengjie.modules.system.service.dto.JobQueryCriteria;
 import me.zhengjie.utils.*;

@@ -16,8 +16,8 @@
 package me.zhengjie.modules.system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.api.domain.system.User;
 import me.zhengjie.config.FileProperties;
-import me.zhengjie.modules.system.domain.User;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.exception.EntityNotFoundException;
 import me.zhengjie.api.repository.system.UserRepository;
