@@ -16,9 +16,7 @@
 package ${package}.domain;
 
 import lombok.Data;
-import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
-import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 <#if isNotNullColumns??>
 import javax.validation.constraints.*;
@@ -78,8 +76,4 @@ public class ${className} implements Serializable {
     private ${column.columnType} ${column.changeColumnName};
     </#list>
 </#if>
-
-    public void copy(${className} source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
 }

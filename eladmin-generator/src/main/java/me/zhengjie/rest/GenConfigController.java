@@ -18,6 +18,7 @@ package me.zhengjie.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.api.domain.generator.GenConfig;
 import me.zhengjie.service.GenConfigService;
 import org.springframework.http.HttpStatus;
@@ -37,12 +38,14 @@ public class GenConfigController {
 
     private final GenConfigService genConfigService;
 
+    @AnonymousAccess
     @ApiOperation("查询")
     @GetMapping(value = "/{tableName}")
     public ResponseEntity<Object> query(@PathVariable String tableName){
         return new ResponseEntity<>(genConfigService.find(tableName), HttpStatus.OK);
     }
 
+    @AnonymousAccess
     @ApiOperation("修改")
     @PutMapping
     public ResponseEntity<Object> update(@Validated @RequestBody GenConfig genConfig){

@@ -42,6 +42,7 @@ import cn.hutool.core.util.IdUtil;
 <#if !auto && pkColumnType = 'String'>
 import cn.hutool.core.util.IdUtil;
 </#if>
+import cn.hutool.core.bean.BeanUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import me.zhengjie.utils.PageUtil;
@@ -125,7 +126,7 @@ public class ${className}ServiceImpl implements ${className}Service {
         </#if>
     </#list>
 </#if>
-        ${changeClassName}.copy(resources);
+        BeanUtil.copyProperties(resources, ${changeClassName}, CopyOptions.create().setIgnoreNullValue(true));
         ${changeClassName}Repository.save(${changeClassName});
     }
 

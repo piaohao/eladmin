@@ -18,6 +18,7 @@ package me.zhengjie.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.api.domain.generator.ColumnInfo;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.service.GenConfigService;
@@ -62,6 +63,7 @@ public class GeneratorController {
         return new ResponseEntity<>(generatorService.getTables(name,startEnd), HttpStatus.OK);
     }
 
+    @AnonymousAccess
     @ApiOperation("查询字段数据")
     @GetMapping(value = "/columns")
     public ResponseEntity<Object> queryColumns(@RequestParam String tableName){
@@ -85,6 +87,7 @@ public class GeneratorController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @AnonymousAccess
     @ApiOperation("生成代码")
     @PostMapping(value = "/{tableName}/{type}")
     public ResponseEntity<Object> generator(@PathVariable String tableName, @PathVariable Integer type, HttpServletRequest request, HttpServletResponse response){
