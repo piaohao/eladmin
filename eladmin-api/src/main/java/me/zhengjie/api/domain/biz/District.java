@@ -15,13 +15,14 @@
 */
 package me.zhengjie.api.domain.biz;
 
-import lombok.Data;
 import io.swagger.annotations.ApiModelProperty;
-import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Data;
+
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.sql.Timestamp;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
 * @website https://el-admin.vip

@@ -43,6 +43,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.IdUtil;
 </#if>
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import me.zhengjie.utils.PageUtil;

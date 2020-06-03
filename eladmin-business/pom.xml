@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>me.zhengjie</groupId>
-            <artifactId>eladmin-common</artifactId>
+            <artifactId>eladmin-logging</artifactId>
             <version>2.4</version>
         </dependency>
 
