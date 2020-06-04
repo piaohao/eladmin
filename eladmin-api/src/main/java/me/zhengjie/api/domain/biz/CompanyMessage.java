@@ -39,13 +39,19 @@ public class CompanyMessage implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "company_id")
+//    @Column(name = "company_id")
     @ApiModelProperty(value = "companyId")
-    private Long companyId;
+    @ManyToOne
+    @JoinColumn(name="company_id")
+    private Company company;
+//    private Long companyId;
 
-    @Column(name = "message_id")
+//    @Column(name = "message_id")
     @ApiModelProperty(value = "messageId")
-    private Long messageId;
+    @ManyToOne
+    @JoinColumn(name="message_id")
+    private Message message;
+//    private Long messageId;
 
     @Column(name = "is_read")
     @ApiModelProperty(value = "isRead")

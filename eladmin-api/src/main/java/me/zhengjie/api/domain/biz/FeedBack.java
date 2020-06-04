@@ -39,9 +39,12 @@ public class FeedBack implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "student_user_id")
+//    @Column(name = "student_user_id")
     @ApiModelProperty(value = "studentUserId")
-    private Long studentUserId;
+    @ManyToOne
+    @JoinColumn(name="student_user_id")
+    private StudentUser studentUser;
+//    private Long studentUserId;
 
     @Column(name = "type")
     @ApiModelProperty(value = "type")

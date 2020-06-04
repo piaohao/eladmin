@@ -39,13 +39,19 @@ public class ApprenticeProjectApplicant implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "apprentice_project_id")
+//    @Column(name = "apprentice_project_id")
     @ApiModelProperty(value = "apprenticeProjectId")
-    private Long apprenticeProjectId;
+    @ManyToOne
+    @JoinColumn(name="apprentice_project_id")
+    private ApprenticeProject apprenticeProject;
+//    private Long apprenticeProjectId;
 
-    @Column(name = "student_user_id")
+//    @Column(name = "student_user_id")
     @ApiModelProperty(value = "studentUserId")
-    private Long studentUserId;
+    @OneToOne
+    @JoinColumn(name="student_user_id")
+    private StudentUser studentUser;
+//    private Long studentUserId;
 
     @Column(name = "status")
     @ApiModelProperty(value = "status")

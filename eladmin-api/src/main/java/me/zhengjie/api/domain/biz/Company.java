@@ -89,31 +89,52 @@ public class Company implements Serializable {
     @ApiModelProperty(value = "isStar")
     private Integer isStar;
 
-    @Column(name = "company_scale_id")
+//    @Column(name = "company_scale_id")
     @ApiModelProperty(value = "companyScaleId")
-    private Long companyScaleId;
+    @OneToOne
+    @JoinColumn(name="company_scale_id")
+    private CompanyScale scale;
+//    private Long companyScaleId;
 
-    @Column(name = "company_financing_id")
+//    @Column(name = "company_financing_id")
     @ApiModelProperty(value = "companyFinancingId")
-    private Long companyFinancingId;
+    @OneToOne
+    @JoinColumn(name="company_financing_id")
+    private CompanyFinancing financing;
+//    private Long companyFinancingId;
 
-    @Column(name = "state_id")
+//    @Column(name = "state_id")
     @ApiModelProperty(value = "stateId")
-    private Long stateId;
+    @OneToOne
+    @JoinColumn(name="state_id")
+    private State state;
+//    private Long stateId;
 
-    @Column(name = "city_id")
+//    @Column(name = "city_id")
     @ApiModelProperty(value = "cityId")
-    private Long cityId;
+    @OneToOne
+    @JoinColumn(name="city_id")
+    private City city;
+//    private Long cityId;
 
-    @Column(name = "district_id")
+//    @Column(name = "district_id")
     @ApiModelProperty(value = "districtId")
-    private Long districtId;
+    @OneToOne
+    @JoinColumn(name="district_id")
+    private District district;
+//    private Long districtId;
 
-    @Column(name = "industry_id")
+//    @Column(name = "industry_id")
     @ApiModelProperty(value = "industryId")
-    private Long industryId;
+    @OneToOne
+    @JoinColumn(name="industry_id")
+    private Industry industry;
+//    private Long industryId;
 
-    @Column(name = "welfare_id")
+//    @Column(name = "welfare_id")
     @ApiModelProperty(value = "welfareId")
-    private Long welfareId;
+    @OneToOne
+    @JoinColumn(name="welfare_id")
+    private CompanyWelfare welfare;
+//    private Long welfareId;
 }

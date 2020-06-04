@@ -39,9 +39,12 @@ public class City implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "state_id")
+//    @Column(name = "state_id")
     @ApiModelProperty(value = "stateId")
-    private Long stateId;
+    @ManyToOne
+    @JoinColumn(name="state_id")
+    private State state;
+//    private Long stateId;
 
     @Column(name = "name",nullable = false)
     @NotBlank

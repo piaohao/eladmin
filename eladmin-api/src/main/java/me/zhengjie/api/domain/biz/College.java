@@ -38,9 +38,12 @@ public class College implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "school_id")
+//    @Column(name = "school_id")
     @ApiModelProperty(value = "schoolId")
-    private Long schoolId;
+    @ManyToOne
+    @JoinColumn(name = "school_id")
+    private School school;
+//    private Long schoolId;
 
     @Column(name = "name")
     @ApiModelProperty(value = "name")

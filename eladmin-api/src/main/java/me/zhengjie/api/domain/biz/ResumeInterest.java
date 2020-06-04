@@ -38,9 +38,12 @@ public class ResumeInterest implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "resume_id")
+//    @Column(name = "resume_id")
     @ApiModelProperty(value = "resumeId")
-    private Long resumeId;
+    @OneToOne
+    @JoinColumn(name="resume_id")
+    private Resume resume;
+//    private Long resumeId;
 
     @Column(name = "tags")
     @ApiModelProperty(value = "tags")

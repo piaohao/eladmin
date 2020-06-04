@@ -161,7 +161,10 @@ public class CompanyUser implements Serializable {
     @ApiModelProperty(value = "updatedAt")
     private Timestamp updatedAt;
 
-    @Column(name = "company_id")
+//    @Column(name = "company_id")
     @ApiModelProperty(value = "companyId")
-    private Long companyId;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+//    private Long companyId;
 }

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.AdminUser;
 import me.zhengjie.modules.biz.service.AdminUserService;
 import me.zhengjie.modules.biz.service.dto.AdminUserQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "admin_user管理")
-@RequestMapping("/api/AdminUser")
+@Api(tags = "AdminUser管理")
+@RequestMapping("/api/adminUser")
 public class AdminUserController {
 
-    private final AdminUserService AdminUserService;
+    private final AdminUserService adminUserService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('AdminUser:list')")
+    @PreAuthorize("@el.check('adminUser:list')")
     public void download(HttpServletResponse response, AdminUserQueryCriteria criteria) throws IOException {
-        AdminUserService.download(AdminUserService.queryAll(criteria), response);
+        adminUserService.download(adminUserService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询admin_user")
-    @ApiOperation("查询admin_user")
-    @PreAuthorize("@el.check('AdminUser:list')")
+    @Log("查询AdminUser")
+    @ApiOperation("查询AdminUser")
+    @PreAuthorize("@el.check('adminUser:list')")
     public ResponseEntity<Object> query(AdminUserQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(AdminUserService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(adminUserService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增admin_user")
-    @ApiOperation("新增admin_user")
-    @PreAuthorize("@el.check('AdminUser:add')")
+    @Log("新增AdminUser")
+    @ApiOperation("新增AdminUser")
+    @PreAuthorize("@el.check('adminUser:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody AdminUser resources){
-        return new ResponseEntity<>(AdminUserService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(adminUserService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改admin_user")
-    @ApiOperation("修改admin_user")
-    @PreAuthorize("@el.check('AdminUser:edit')")
+    @Log("修改AdminUser")
+    @ApiOperation("修改AdminUser")
+    @PreAuthorize("@el.check('adminUser:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody AdminUser resources){
-        AdminUserService.update(resources);
+        adminUserService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除admin_user")
-    @ApiOperation("删除admin_user")
-    @PreAuthorize("@el.check('AdminUser:del')")
+    @Log("删除AdminUser")
+    @ApiOperation("删除AdminUser")
+    @PreAuthorize("@el.check('adminUser:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        AdminUserService.deleteAll(ids);
+        adminUserService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

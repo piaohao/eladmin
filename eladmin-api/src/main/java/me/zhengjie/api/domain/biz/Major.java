@@ -42,7 +42,10 @@ public class Major implements Serializable {
     @ApiModelProperty(value = "专业名称")
     private String name;
 
-    @Column(name = "college_id")
+//    @Column(name = "college_id")
     @ApiModelProperty(value = "学院id")
-    private Long collegeId;
+    @ManyToOne
+    @JoinColumn(name="college_id")
+    private College college;
+//    private Long collegeId;
 }

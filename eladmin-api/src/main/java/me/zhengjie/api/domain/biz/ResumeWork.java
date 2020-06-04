@@ -38,9 +38,12 @@ public class ResumeWork implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @Column(name = "resume_id")
+//    @Column(name = "resume_id")
     @ApiModelProperty(value = "resumeId")
-    private Long resumeId;
+    @ManyToOne
+    @JoinColumn(name="resume_id")
+    private Resume resume;
+//    private Long resumeId;
 
     @Column(name = "work_name")
     @ApiModelProperty(value = "workName")
