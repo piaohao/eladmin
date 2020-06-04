@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.SchoolUser;
 import me.zhengjie.modules.biz.service.SchoolUserService;
 import me.zhengjie.modules.biz.service.dto.SchoolUserQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "school_user管理")
-@RequestMapping("/api/SchoolUser")
+@Api(tags = "SchoolUser管理")
+@RequestMapping("/api/schoolUser")
 public class SchoolUserController {
 
-    private final SchoolUserService SchoolUserService;
+    private final SchoolUserService schoolUserService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('SchoolUser:list')")
+    @PreAuthorize("@el.check('schoolUser:list')")
     public void download(HttpServletResponse response, SchoolUserQueryCriteria criteria) throws IOException {
-        SchoolUserService.download(SchoolUserService.queryAll(criteria), response);
+        schoolUserService.download(schoolUserService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询school_user")
-    @ApiOperation("查询school_user")
-    @PreAuthorize("@el.check('SchoolUser:list')")
+    @Log("查询SchoolUser")
+    @ApiOperation("查询SchoolUser")
+    @PreAuthorize("@el.check('schoolUser:list')")
     public ResponseEntity<Object> query(SchoolUserQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(SchoolUserService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(schoolUserService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增school_user")
-    @ApiOperation("新增school_user")
-    @PreAuthorize("@el.check('SchoolUser:add')")
+    @Log("新增SchoolUser")
+    @ApiOperation("新增SchoolUser")
+    @PreAuthorize("@el.check('schoolUser:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SchoolUser resources){
-        return new ResponseEntity<>(SchoolUserService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(schoolUserService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改school_user")
-    @ApiOperation("修改school_user")
-    @PreAuthorize("@el.check('SchoolUser:edit')")
+    @Log("修改SchoolUser")
+    @ApiOperation("修改SchoolUser")
+    @PreAuthorize("@el.check('schoolUser:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody SchoolUser resources){
-        SchoolUserService.update(resources);
+        schoolUserService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除school_user")
-    @ApiOperation("删除school_user")
-    @PreAuthorize("@el.check('SchoolUser:del')")
+    @Log("删除SchoolUser")
+    @ApiOperation("删除SchoolUser")
+    @PreAuthorize("@el.check('schoolUser:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        SchoolUserService.deleteAll(ids);
+        schoolUserService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

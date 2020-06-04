@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.VccApplicant;
 import me.zhengjie.modules.biz.service.VccApplicantService;
 import me.zhengjie.modules.biz.service.dto.VccApplicantQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "vcc_applicant管理")
-@RequestMapping("/api/VccApplicant")
+@Api(tags = "VccApplicant管理")
+@RequestMapping("/api/vccApplicant")
 public class VccApplicantController {
 
-    private final VccApplicantService VccApplicantService;
+    private final VccApplicantService vccApplicantService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('VccApplicant:list')")
+    @PreAuthorize("@el.check('vccApplicant:list')")
     public void download(HttpServletResponse response, VccApplicantQueryCriteria criteria) throws IOException {
-        VccApplicantService.download(VccApplicantService.queryAll(criteria), response);
+        vccApplicantService.download(vccApplicantService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询vcc_applicant")
-    @ApiOperation("查询vcc_applicant")
-    @PreAuthorize("@el.check('VccApplicant:list')")
+    @Log("查询VccApplicant")
+    @ApiOperation("查询VccApplicant")
+    @PreAuthorize("@el.check('vccApplicant:list')")
     public ResponseEntity<Object> query(VccApplicantQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(VccApplicantService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(vccApplicantService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增vcc_applicant")
-    @ApiOperation("新增vcc_applicant")
-    @PreAuthorize("@el.check('VccApplicant:add')")
+    @Log("新增VccApplicant")
+    @ApiOperation("新增VccApplicant")
+    @PreAuthorize("@el.check('vccApplicant:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody VccApplicant resources){
-        return new ResponseEntity<>(VccApplicantService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(vccApplicantService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改vcc_applicant")
-    @ApiOperation("修改vcc_applicant")
-    @PreAuthorize("@el.check('VccApplicant:edit')")
+    @Log("修改VccApplicant")
+    @ApiOperation("修改VccApplicant")
+    @PreAuthorize("@el.check('vccApplicant:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody VccApplicant resources){
-        VccApplicantService.update(resources);
+        vccApplicantService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除vcc_applicant")
-    @ApiOperation("删除vcc_applicant")
-    @PreAuthorize("@el.check('VccApplicant:del')")
+    @Log("删除VccApplicant")
+    @ApiOperation("删除VccApplicant")
+    @PreAuthorize("@el.check('vccApplicant:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        VccApplicantService.deleteAll(ids);
+        vccApplicantService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

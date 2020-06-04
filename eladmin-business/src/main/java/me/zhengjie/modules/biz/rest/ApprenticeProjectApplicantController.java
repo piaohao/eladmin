@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ApprenticeProjectApplicant;
 import me.zhengjie.modules.biz.service.ApprenticeProjectApplicantService;
 import me.zhengjie.modules.biz.service.dto.ApprenticeProjectApplicantQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "apprentice_project_applicant管理")
-@RequestMapping("/api/ApprenticeProjectApplicant")
+@Api(tags = "ApprenticeProjectApplicant管理")
+@RequestMapping("/api/apprenticeProjectApplicant")
 public class ApprenticeProjectApplicantController {
 
-    private final ApprenticeProjectApplicantService ApprenticeProjectApplicantService;
+    private final ApprenticeProjectApplicantService apprenticeProjectApplicantService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ApprenticeProjectApplicant:list')")
+    @PreAuthorize("@el.check('apprenticeProjectApplicant:list')")
     public void download(HttpServletResponse response, ApprenticeProjectApplicantQueryCriteria criteria) throws IOException {
-        ApprenticeProjectApplicantService.download(ApprenticeProjectApplicantService.queryAll(criteria), response);
+        apprenticeProjectApplicantService.download(apprenticeProjectApplicantService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询apprentice_project_applicant")
-    @ApiOperation("查询apprentice_project_applicant")
-    @PreAuthorize("@el.check('ApprenticeProjectApplicant:list')")
+    @Log("查询ApprenticeProjectApplicant")
+    @ApiOperation("查询ApprenticeProjectApplicant")
+    @PreAuthorize("@el.check('apprenticeProjectApplicant:list')")
     public ResponseEntity<Object> query(ApprenticeProjectApplicantQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ApprenticeProjectApplicantService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(apprenticeProjectApplicantService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增apprentice_project_applicant")
-    @ApiOperation("新增apprentice_project_applicant")
-    @PreAuthorize("@el.check('ApprenticeProjectApplicant:add')")
+    @Log("新增ApprenticeProjectApplicant")
+    @ApiOperation("新增ApprenticeProjectApplicant")
+    @PreAuthorize("@el.check('apprenticeProjectApplicant:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ApprenticeProjectApplicant resources){
-        return new ResponseEntity<>(ApprenticeProjectApplicantService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(apprenticeProjectApplicantService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改apprentice_project_applicant")
-    @ApiOperation("修改apprentice_project_applicant")
-    @PreAuthorize("@el.check('ApprenticeProjectApplicant:edit')")
+    @Log("修改ApprenticeProjectApplicant")
+    @ApiOperation("修改ApprenticeProjectApplicant")
+    @PreAuthorize("@el.check('apprenticeProjectApplicant:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ApprenticeProjectApplicant resources){
-        ApprenticeProjectApplicantService.update(resources);
+        apprenticeProjectApplicantService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除apprentice_project_applicant")
-    @ApiOperation("删除apprentice_project_applicant")
-    @PreAuthorize("@el.check('ApprenticeProjectApplicant:del')")
+    @Log("删除ApprenticeProjectApplicant")
+    @ApiOperation("删除ApprenticeProjectApplicant")
+    @PreAuthorize("@el.check('apprenticeProjectApplicant:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ApprenticeProjectApplicantService.deleteAll(ids);
+        apprenticeProjectApplicantService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

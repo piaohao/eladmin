@@ -15,103 +15,102 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.VccApplicant;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.VccApplicantRepository;
 import me.zhengjie.modules.biz.service.VccApplicantService;
 import me.zhengjie.modules.biz.service.dto.VccApplicantDto;
 import me.zhengjie.modules.biz.service.dto.VccApplicantQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.VccApplicantMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class VccApplicantServiceImpl implements VccApplicantService {
 
-    private final VccApplicantRepository VccApplicantRepository;
-    private final VccApplicantMapper VccApplicantMapper;
+    private final VccApplicantRepository vccApplicantRepository;
+    private final VccApplicantMapper vccApplicantMapper;
 
     @Override
     public Map<String,Object> queryAll(VccApplicantQueryCriteria criteria, Pageable pageable){
-        Page<VccApplicant> page = VccApplicantRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(VccApplicantMapper::toDto));
+        Page<VccApplicant> page = vccApplicantRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(vccApplicantMapper::toDto));
     }
 
     @Override
     public List<VccApplicantDto> queryAll(VccApplicantQueryCriteria criteria){
-        return VccApplicantMapper.toDto(VccApplicantRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return vccApplicantMapper.toDto(vccApplicantRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public VccApplicantDto findById(Long id) {
-        VccApplicant VccApplicant = VccApplicantRepository.findById(id).orElseGet(VccApplicant::new);
-        ValidationUtil.isNull(VccApplicant.getId(),"VccApplicant","id",id);
-        return VccApplicantMapper.toDto(VccApplicant);
+        VccApplicant vccApplicant = vccApplicantRepository.findById(id).orElseGet(VccApplicant::new);
+        ValidationUtil.isNull(vccApplicant.getId(),"VccApplicant","id",id);
+        return vccApplicantMapper.toDto(vccApplicant);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public VccApplicantDto create(VccApplicant resources) {
-        return VccApplicantMapper.toDto(VccApplicantRepository.save(resources));
+        return vccApplicantMapper.toDto(vccApplicantRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(VccApplicant resources) {
-        VccApplicant VccApplicant = VccApplicantRepository.findById(resources.getId()).orElseGet(VccApplicant::new);
-        ValidationUtil.isNull( VccApplicant.getId(),"VccApplicant","id",resources.getId());
-        BeanUtil.copyProperties(resources, VccApplicant, CopyOptions.create().setIgnoreNullValue(true));
-        VccApplicantRepository.save(VccApplicant);
+        VccApplicant vccApplicant = vccApplicantRepository.findById(resources.getId()).orElseGet(VccApplicant::new);
+        ValidationUtil.isNull( vccApplicant.getId(),"VccApplicant","id",resources.getId());
+        BeanUtil.copyProperties(resources, vccApplicant, CopyOptions.create().setIgnoreNullValue(true));
+        vccApplicantRepository.save(vccApplicant);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            VccApplicantRepository.deleteById(id);
+            vccApplicantRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<VccApplicantDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (VccApplicantDto VccApplicant : all) {
+        for (VccApplicantDto vccApplicant : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" resumeId",  VccApplicant.getResumeId());
-            map.put(" vacancyId",  VccApplicant.getVacancyId());
-            map.put(" status",  VccApplicant.getStatus());
-            map.put(" createdAt",  VccApplicant.getCreatedAt());
-            map.put(" updatedAt",  VccApplicant.getUpdatedAt());
-            map.put(" willInterviewAt",  VccApplicant.getWillInterviewAt());
-            map.put(" interviewComment",  VccApplicant.getInterviewComment());
-            map.put(" timeline",  VccApplicant.getTimeline());
-            map.put("面试地点", VccApplicant.getInterviewPlace());
-            map.put("联系人", VccApplicant.getInterviewPerson());
-            map.put("面试电话", VccApplicant.getInterviewMobile());
-            map.put("录用说明", VccApplicant.getHireComment());
-            map.put("不合适说明", VccApplicant.getImproperComment());
+            map.put(" resumeId",  vccApplicant.getResumeId());
+            map.put(" vacancyId",  vccApplicant.getVacancyId());
+            map.put(" status",  vccApplicant.getStatus());
+            map.put(" createdAt",  vccApplicant.getCreatedAt());
+            map.put(" updatedAt",  vccApplicant.getUpdatedAt());
+            map.put(" willInterviewAt",  vccApplicant.getWillInterviewAt());
+            map.put(" interviewComment",  vccApplicant.getInterviewComment());
+            map.put(" timeline",  vccApplicant.getTimeline());
+            map.put("面试地点", vccApplicant.getInterviewPlace());
+            map.put("联系人", vccApplicant.getInterviewPerson());
+            map.put("面试电话", vccApplicant.getInterviewMobile());
+            map.put("录用说明", vccApplicant.getHireComment());
+            map.put("不合适说明", vccApplicant.getImproperComment());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.VacancyBookmark;
 import me.zhengjie.modules.biz.service.VacancyBookmarkService;
 import me.zhengjie.modules.biz.service.dto.VacancyBookmarkQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "vacancy_bookmark管理")
-@RequestMapping("/api/VacancyBookmark")
+@Api(tags = "VacancyBookmark管理")
+@RequestMapping("/api/vacancyBookmark")
 public class VacancyBookmarkController {
 
-    private final VacancyBookmarkService VacancyBookmarkService;
+    private final VacancyBookmarkService vacancyBookmarkService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('VacancyBookmark:list')")
+    @PreAuthorize("@el.check('vacancyBookmark:list')")
     public void download(HttpServletResponse response, VacancyBookmarkQueryCriteria criteria) throws IOException {
-        VacancyBookmarkService.download(VacancyBookmarkService.queryAll(criteria), response);
+        vacancyBookmarkService.download(vacancyBookmarkService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询vacancy_bookmark")
-    @ApiOperation("查询vacancy_bookmark")
-    @PreAuthorize("@el.check('VacancyBookmark:list')")
+    @Log("查询VacancyBookmark")
+    @ApiOperation("查询VacancyBookmark")
+    @PreAuthorize("@el.check('vacancyBookmark:list')")
     public ResponseEntity<Object> query(VacancyBookmarkQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(VacancyBookmarkService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(vacancyBookmarkService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增vacancy_bookmark")
-    @ApiOperation("新增vacancy_bookmark")
-    @PreAuthorize("@el.check('VacancyBookmark:add')")
+    @Log("新增VacancyBookmark")
+    @ApiOperation("新增VacancyBookmark")
+    @PreAuthorize("@el.check('vacancyBookmark:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody VacancyBookmark resources){
-        return new ResponseEntity<>(VacancyBookmarkService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(vacancyBookmarkService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改vacancy_bookmark")
-    @ApiOperation("修改vacancy_bookmark")
-    @PreAuthorize("@el.check('VacancyBookmark:edit')")
+    @Log("修改VacancyBookmark")
+    @ApiOperation("修改VacancyBookmark")
+    @PreAuthorize("@el.check('vacancyBookmark:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody VacancyBookmark resources){
-        VacancyBookmarkService.update(resources);
+        vacancyBookmarkService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除vacancy_bookmark")
-    @ApiOperation("删除vacancy_bookmark")
-    @PreAuthorize("@el.check('VacancyBookmark:del')")
+    @Log("删除VacancyBookmark")
+    @ApiOperation("删除VacancyBookmark")
+    @PreAuthorize("@el.check('vacancyBookmark:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        VacancyBookmarkService.deleteAll(ids);
+        vacancyBookmarkService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

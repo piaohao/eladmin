@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Major;
 import me.zhengjie.modules.biz.service.MajorService;
 import me.zhengjie.modules.biz.service.dto.MajorQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "major管理")
-@RequestMapping("/api/Major")
+@Api(tags = "Major管理")
+@RequestMapping("/api/major")
 public class MajorController {
 
-    private final MajorService MajorService;
+    private final MajorService majorService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Major:list')")
+    @PreAuthorize("@el.check('major:list')")
     public void download(HttpServletResponse response, MajorQueryCriteria criteria) throws IOException {
-        MajorService.download(MajorService.queryAll(criteria), response);
+        majorService.download(majorService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询major")
-    @ApiOperation("查询major")
-    @PreAuthorize("@el.check('Major:list')")
+    @Log("查询Major")
+    @ApiOperation("查询Major")
+    @PreAuthorize("@el.check('major:list')")
     public ResponseEntity<Object> query(MajorQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(MajorService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(majorService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增major")
-    @ApiOperation("新增major")
-    @PreAuthorize("@el.check('Major:add')")
+    @Log("新增Major")
+    @ApiOperation("新增Major")
+    @PreAuthorize("@el.check('major:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Major resources){
-        return new ResponseEntity<>(MajorService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(majorService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改major")
-    @ApiOperation("修改major")
-    @PreAuthorize("@el.check('Major:edit')")
+    @Log("修改Major")
+    @ApiOperation("修改Major")
+    @PreAuthorize("@el.check('major:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Major resources){
-        MajorService.update(resources);
+        majorService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除major")
-    @ApiOperation("删除major")
-    @PreAuthorize("@el.check('Major:del')")
+    @Log("删除Major")
+    @ApiOperation("删除Major")
+    @PreAuthorize("@el.check('major:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        MajorService.deleteAll(ids);
+        majorService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

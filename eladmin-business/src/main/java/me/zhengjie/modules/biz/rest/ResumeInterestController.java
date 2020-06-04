@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeInterest;
 import me.zhengjie.modules.biz.service.ResumeInterestService;
 import me.zhengjie.modules.biz.service.dto.ResumeInterestQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_interest管理")
-@RequestMapping("/api/ResumeInterest")
+@Api(tags = "ResumeInterest管理")
+@RequestMapping("/api/resumeInterest")
 public class ResumeInterestController {
 
-    private final ResumeInterestService ResumeInterestService;
+    private final ResumeInterestService resumeInterestService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeInterest:list')")
+    @PreAuthorize("@el.check('resumeInterest:list')")
     public void download(HttpServletResponse response, ResumeInterestQueryCriteria criteria) throws IOException {
-        ResumeInterestService.download(ResumeInterestService.queryAll(criteria), response);
+        resumeInterestService.download(resumeInterestService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_interest")
-    @ApiOperation("查询resume_interest")
-    @PreAuthorize("@el.check('ResumeInterest:list')")
+    @Log("查询ResumeInterest")
+    @ApiOperation("查询ResumeInterest")
+    @PreAuthorize("@el.check('resumeInterest:list')")
     public ResponseEntity<Object> query(ResumeInterestQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeInterestService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeInterestService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_interest")
-    @ApiOperation("新增resume_interest")
-    @PreAuthorize("@el.check('ResumeInterest:add')")
+    @Log("新增ResumeInterest")
+    @ApiOperation("新增ResumeInterest")
+    @PreAuthorize("@el.check('resumeInterest:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeInterest resources){
-        return new ResponseEntity<>(ResumeInterestService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeInterestService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_interest")
-    @ApiOperation("修改resume_interest")
-    @PreAuthorize("@el.check('ResumeInterest:edit')")
+    @Log("修改ResumeInterest")
+    @ApiOperation("修改ResumeInterest")
+    @PreAuthorize("@el.check('resumeInterest:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeInterest resources){
-        ResumeInterestService.update(resources);
+        resumeInterestService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_interest")
-    @ApiOperation("删除resume_interest")
-    @PreAuthorize("@el.check('ResumeInterest:del')")
+    @Log("删除ResumeInterest")
+    @ApiOperation("删除ResumeInterest")
+    @PreAuthorize("@el.check('resumeInterest:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeInterestService.deleteAll(ids);
+        resumeInterestService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

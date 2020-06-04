@@ -29,17 +29,17 @@ public class EladminSystemApplicationTests {
                         GenConfig genConfig = JSONUtil.toBean(resp0.body(), GenConfig.class);
                         id = genConfig.getId();
                     }
-                    String filteredName = StrUtil.removePrefix(name, "biz_");
+                    String filteredName = StrUtil.toCamelCase(StrUtil.removePrefix(name, "biz_"));
                     GenConfig config = new GenConfig();
                     config.setId(id);
                     config.setTableName(name);
-                    config.setApiAlias(filteredName);
+                    config.setApiAlias("biz: " + StrUtil.upperFirst(filteredName));
                     config.setPack("me.zhengjie.modules.biz");
                     config.setModuleName("biz");
                     config.setPath("C:\\Users\\Administrator.DESKTOP-D3RJA7N\\IdeaProjects\\eladmin\\eladmin-web\\src\\views\\biz\\" + filteredName);
-                    config.setApiPath("C:\\Users\\Administrator.DESKTOP-D3RJA7N\\IdeaProjects\\eladmin\\eladmin-web\\src\\api\\biz\\" + filteredName);
+                    config.setApiPath("C:\\Users\\Administrator.DESKTOP-D3RJA7N\\IdeaProjects\\eladmin\\eladmin-web\\src\\api\\biz");
                     config.setAuthor("piaohao");
-                    config.setPrefix("biz");
+                    config.setPrefix("biz_");
                     config.setCover(false);
 
                     HttpResponse resp = HttpRequest.put("http://localhost:8000/api/genConfig")

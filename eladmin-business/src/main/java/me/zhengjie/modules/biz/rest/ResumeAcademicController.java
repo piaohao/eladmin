@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeAcademic;
 import me.zhengjie.modules.biz.service.ResumeAcademicService;
 import me.zhengjie.modules.biz.service.dto.ResumeAcademicQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_academic管理")
-@RequestMapping("/api/ResumeAcademic")
+@Api(tags = "ResumeAcademic管理")
+@RequestMapping("/api/resumeAcademic")
 public class ResumeAcademicController {
 
-    private final ResumeAcademicService ResumeAcademicService;
+    private final ResumeAcademicService resumeAcademicService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeAcademic:list')")
+    @PreAuthorize("@el.check('resumeAcademic:list')")
     public void download(HttpServletResponse response, ResumeAcademicQueryCriteria criteria) throws IOException {
-        ResumeAcademicService.download(ResumeAcademicService.queryAll(criteria), response);
+        resumeAcademicService.download(resumeAcademicService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_academic")
-    @ApiOperation("查询resume_academic")
-    @PreAuthorize("@el.check('ResumeAcademic:list')")
+    @Log("查询ResumeAcademic")
+    @ApiOperation("查询ResumeAcademic")
+    @PreAuthorize("@el.check('resumeAcademic:list')")
     public ResponseEntity<Object> query(ResumeAcademicQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeAcademicService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeAcademicService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_academic")
-    @ApiOperation("新增resume_academic")
-    @PreAuthorize("@el.check('ResumeAcademic:add')")
+    @Log("新增ResumeAcademic")
+    @ApiOperation("新增ResumeAcademic")
+    @PreAuthorize("@el.check('resumeAcademic:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeAcademic resources){
-        return new ResponseEntity<>(ResumeAcademicService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeAcademicService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_academic")
-    @ApiOperation("修改resume_academic")
-    @PreAuthorize("@el.check('ResumeAcademic:edit')")
+    @Log("修改ResumeAcademic")
+    @ApiOperation("修改ResumeAcademic")
+    @PreAuthorize("@el.check('resumeAcademic:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeAcademic resources){
-        ResumeAcademicService.update(resources);
+        resumeAcademicService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_academic")
-    @ApiOperation("删除resume_academic")
-    @PreAuthorize("@el.check('ResumeAcademic:del')")
+    @Log("删除ResumeAcademic")
+    @ApiOperation("删除ResumeAcademic")
+    @PreAuthorize("@el.check('resumeAcademic:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeAcademicService.deleteAll(ids);
+        resumeAcademicService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeIntern;
 import me.zhengjie.modules.biz.service.ResumeInternService;
 import me.zhengjie.modules.biz.service.dto.ResumeInternQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_intern管理")
-@RequestMapping("/api/ResumeIntern")
+@Api(tags = "ResumeIntern管理")
+@RequestMapping("/api/resumeIntern")
 public class ResumeInternController {
 
-    private final ResumeInternService ResumeInternService;
+    private final ResumeInternService resumeInternService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeIntern:list')")
+    @PreAuthorize("@el.check('resumeIntern:list')")
     public void download(HttpServletResponse response, ResumeInternQueryCriteria criteria) throws IOException {
-        ResumeInternService.download(ResumeInternService.queryAll(criteria), response);
+        resumeInternService.download(resumeInternService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_intern")
-    @ApiOperation("查询resume_intern")
-    @PreAuthorize("@el.check('ResumeIntern:list')")
+    @Log("查询ResumeIntern")
+    @ApiOperation("查询ResumeIntern")
+    @PreAuthorize("@el.check('resumeIntern:list')")
     public ResponseEntity<Object> query(ResumeInternQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeInternService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeInternService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_intern")
-    @ApiOperation("新增resume_intern")
-    @PreAuthorize("@el.check('ResumeIntern:add')")
+    @Log("新增ResumeIntern")
+    @ApiOperation("新增ResumeIntern")
+    @PreAuthorize("@el.check('resumeIntern:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeIntern resources){
-        return new ResponseEntity<>(ResumeInternService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeInternService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_intern")
-    @ApiOperation("修改resume_intern")
-    @PreAuthorize("@el.check('ResumeIntern:edit')")
+    @Log("修改ResumeIntern")
+    @ApiOperation("修改ResumeIntern")
+    @PreAuthorize("@el.check('resumeIntern:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeIntern resources){
-        ResumeInternService.update(resources);
+        resumeInternService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_intern")
-    @ApiOperation("删除resume_intern")
-    @PreAuthorize("@el.check('ResumeIntern:del')")
+    @Log("删除ResumeIntern")
+    @ApiOperation("删除ResumeIntern")
+    @PreAuthorize("@el.check('resumeIntern:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeInternService.deleteAll(ids);
+        resumeInternService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.CompanyScale;
 import me.zhengjie.modules.biz.service.CompanyScaleService;
 import me.zhengjie.modules.biz.service.dto.CompanyScaleQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "company_scale管理")
-@RequestMapping("/api/CompanyScale")
+@Api(tags = "CompanyScale管理")
+@RequestMapping("/api/companyScale")
 public class CompanyScaleController {
 
-    private final CompanyScaleService CompanyScaleService;
+    private final CompanyScaleService companyScaleService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('CompanyScale:list')")
+    @PreAuthorize("@el.check('companyScale:list')")
     public void download(HttpServletResponse response, CompanyScaleQueryCriteria criteria) throws IOException {
-        CompanyScaleService.download(CompanyScaleService.queryAll(criteria), response);
+        companyScaleService.download(companyScaleService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询company_scale")
-    @ApiOperation("查询company_scale")
-    @PreAuthorize("@el.check('CompanyScale:list')")
+    @Log("查询CompanyScale")
+    @ApiOperation("查询CompanyScale")
+    @PreAuthorize("@el.check('companyScale:list')")
     public ResponseEntity<Object> query(CompanyScaleQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CompanyScaleService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(companyScaleService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增company_scale")
-    @ApiOperation("新增company_scale")
-    @PreAuthorize("@el.check('CompanyScale:add')")
+    @Log("新增CompanyScale")
+    @ApiOperation("新增CompanyScale")
+    @PreAuthorize("@el.check('companyScale:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody CompanyScale resources){
-        return new ResponseEntity<>(CompanyScaleService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(companyScaleService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改company_scale")
-    @ApiOperation("修改company_scale")
-    @PreAuthorize("@el.check('CompanyScale:edit')")
+    @Log("修改CompanyScale")
+    @ApiOperation("修改CompanyScale")
+    @PreAuthorize("@el.check('companyScale:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody CompanyScale resources){
-        CompanyScaleService.update(resources);
+        companyScaleService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除company_scale")
-    @ApiOperation("删除company_scale")
-    @PreAuthorize("@el.check('CompanyScale:del')")
+    @Log("删除CompanyScale")
+    @ApiOperation("删除CompanyScale")
+    @PreAuthorize("@el.check('companyScale:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CompanyScaleService.deleteAll(ids);
+        companyScaleService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

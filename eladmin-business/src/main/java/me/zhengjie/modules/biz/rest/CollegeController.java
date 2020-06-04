@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.College;
 import me.zhengjie.modules.biz.service.CollegeService;
 import me.zhengjie.modules.biz.service.dto.CollegeQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "college管理")
-@RequestMapping("/api/College")
+@Api(tags = "College管理")
+@RequestMapping("/api/college")
 public class CollegeController {
 
-    private final CollegeService CollegeService;
+    private final CollegeService collegeService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('College:list')")
+    @PreAuthorize("@el.check('college:list')")
     public void download(HttpServletResponse response, CollegeQueryCriteria criteria) throws IOException {
-        CollegeService.download(CollegeService.queryAll(criteria), response);
+        collegeService.download(collegeService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询college")
-    @ApiOperation("查询college")
-    @PreAuthorize("@el.check('College:list')")
+    @Log("查询College")
+    @ApiOperation("查询College")
+    @PreAuthorize("@el.check('college:list')")
     public ResponseEntity<Object> query(CollegeQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CollegeService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(collegeService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增college")
-    @ApiOperation("新增college")
-    @PreAuthorize("@el.check('College:add')")
+    @Log("新增College")
+    @ApiOperation("新增College")
+    @PreAuthorize("@el.check('college:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody College resources){
-        return new ResponseEntity<>(CollegeService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(collegeService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改college")
-    @ApiOperation("修改college")
-    @PreAuthorize("@el.check('College:edit')")
+    @Log("修改College")
+    @ApiOperation("修改College")
+    @PreAuthorize("@el.check('college:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody College resources){
-        CollegeService.update(resources);
+        collegeService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除college")
-    @ApiOperation("删除college")
-    @PreAuthorize("@el.check('College:del')")
+    @Log("删除College")
+    @ApiOperation("删除College")
+    @PreAuthorize("@el.check('college:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CollegeService.deleteAll(ids);
+        collegeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.CompanyMessage;
 import me.zhengjie.modules.biz.service.CompanyMessageService;
 import me.zhengjie.modules.biz.service.dto.CompanyMessageQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "company_message管理")
-@RequestMapping("/api/CompanyMessage")
+@Api(tags = "CompanyMessage管理")
+@RequestMapping("/api/companyMessage")
 public class CompanyMessageController {
 
-    private final CompanyMessageService CompanyMessageService;
+    private final CompanyMessageService companyMessageService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('CompanyMessage:list')")
+    @PreAuthorize("@el.check('companyMessage:list')")
     public void download(HttpServletResponse response, CompanyMessageQueryCriteria criteria) throws IOException {
-        CompanyMessageService.download(CompanyMessageService.queryAll(criteria), response);
+        companyMessageService.download(companyMessageService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询company_message")
-    @ApiOperation("查询company_message")
-    @PreAuthorize("@el.check('CompanyMessage:list')")
+    @Log("查询CompanyMessage")
+    @ApiOperation("查询CompanyMessage")
+    @PreAuthorize("@el.check('companyMessage:list')")
     public ResponseEntity<Object> query(CompanyMessageQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CompanyMessageService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(companyMessageService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增company_message")
-    @ApiOperation("新增company_message")
-    @PreAuthorize("@el.check('CompanyMessage:add')")
+    @Log("新增CompanyMessage")
+    @ApiOperation("新增CompanyMessage")
+    @PreAuthorize("@el.check('companyMessage:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody CompanyMessage resources){
-        return new ResponseEntity<>(CompanyMessageService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(companyMessageService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改company_message")
-    @ApiOperation("修改company_message")
-    @PreAuthorize("@el.check('CompanyMessage:edit')")
+    @Log("修改CompanyMessage")
+    @ApiOperation("修改CompanyMessage")
+    @PreAuthorize("@el.check('companyMessage:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody CompanyMessage resources){
-        CompanyMessageService.update(resources);
+        companyMessageService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除company_message")
-    @ApiOperation("删除company_message")
-    @PreAuthorize("@el.check('CompanyMessage:del')")
+    @Log("删除CompanyMessage")
+    @ApiOperation("删除CompanyMessage")
+    @PreAuthorize("@el.check('companyMessage:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CompanyMessageService.deleteAll(ids);
+        companyMessageService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.School;
 import me.zhengjie.modules.biz.service.SchoolService;
 import me.zhengjie.modules.biz.service.dto.SchoolQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "school管理")
-@RequestMapping("/api/School")
+@Api(tags = "School管理")
+@RequestMapping("/api/school")
 public class SchoolController {
 
-    private final SchoolService SchoolService;
+    private final SchoolService schoolService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('School:list')")
+    @PreAuthorize("@el.check('school:list')")
     public void download(HttpServletResponse response, SchoolQueryCriteria criteria) throws IOException {
-        SchoolService.download(SchoolService.queryAll(criteria), response);
+        schoolService.download(schoolService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询school")
-    @ApiOperation("查询school")
-    @PreAuthorize("@el.check('School:list')")
+    @Log("查询School")
+    @ApiOperation("查询School")
+    @PreAuthorize("@el.check('school:list')")
     public ResponseEntity<Object> query(SchoolQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(SchoolService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(schoolService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增school")
-    @ApiOperation("新增school")
-    @PreAuthorize("@el.check('School:add')")
+    @Log("新增School")
+    @ApiOperation("新增School")
+    @PreAuthorize("@el.check('school:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody School resources){
-        return new ResponseEntity<>(SchoolService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(schoolService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改school")
-    @ApiOperation("修改school")
-    @PreAuthorize("@el.check('School:edit')")
+    @Log("修改School")
+    @ApiOperation("修改School")
+    @PreAuthorize("@el.check('school:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody School resources){
-        SchoolService.update(resources);
+        schoolService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除school")
-    @ApiOperation("删除school")
-    @PreAuthorize("@el.check('School:del')")
+    @Log("删除School")
+    @ApiOperation("删除School")
+    @PreAuthorize("@el.check('school:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        SchoolService.deleteAll(ids);
+        schoolService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

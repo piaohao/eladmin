@@ -15,97 +15,96 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.VccType;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.VccTypeRepository;
 import me.zhengjie.modules.biz.service.VccTypeService;
 import me.zhengjie.modules.biz.service.dto.VccTypeDto;
 import me.zhengjie.modules.biz.service.dto.VccTypeQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.VccTypeMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class VccTypeServiceImpl implements VccTypeService {
 
-    private final VccTypeRepository VccTypeRepository;
-    private final VccTypeMapper VccTypeMapper;
+    private final VccTypeRepository vccTypeRepository;
+    private final VccTypeMapper vccTypeMapper;
 
     @Override
     public Map<String,Object> queryAll(VccTypeQueryCriteria criteria, Pageable pageable){
-        Page<VccType> page = VccTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(VccTypeMapper::toDto));
+        Page<VccType> page = vccTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(vccTypeMapper::toDto));
     }
 
     @Override
     public List<VccTypeDto> queryAll(VccTypeQueryCriteria criteria){
-        return VccTypeMapper.toDto(VccTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return vccTypeMapper.toDto(vccTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public VccTypeDto findById(Long id) {
-        VccType VccType = VccTypeRepository.findById(id).orElseGet(VccType::new);
-        ValidationUtil.isNull(VccType.getId(),"VccType","id",id);
-        return VccTypeMapper.toDto(VccType);
+        VccType vccType = vccTypeRepository.findById(id).orElseGet(VccType::new);
+        ValidationUtil.isNull(vccType.getId(),"VccType","id",id);
+        return vccTypeMapper.toDto(vccType);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public VccTypeDto create(VccType resources) {
-        return VccTypeMapper.toDto(VccTypeRepository.save(resources));
+        return vccTypeMapper.toDto(vccTypeRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(VccType resources) {
-        VccType VccType = VccTypeRepository.findById(resources.getId()).orElseGet(VccType::new);
-        ValidationUtil.isNull( VccType.getId(),"VccType","id",resources.getId());
-        BeanUtil.copyProperties(resources, VccType, CopyOptions.create().setIgnoreNullValue(true));
-        VccTypeRepository.save(VccType);
+        VccType vccType = vccTypeRepository.findById(resources.getId()).orElseGet(VccType::new);
+        ValidationUtil.isNull( vccType.getId(),"VccType","id",resources.getId());
+        BeanUtil.copyProperties(resources, vccType, CopyOptions.create().setIgnoreNullValue(true));
+        vccTypeRepository.save(vccType);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            VccTypeRepository.deleteById(id);
+            vccTypeRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<VccTypeDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (VccTypeDto VccType : all) {
+        for (VccTypeDto vccType : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" name",  VccType.getName());
-            map.put(" parentId",  VccType.getParentId());
-            map.put(" ancestry",  VccType.getAncestry());
-            map.put(" createdAt",  VccType.getCreatedAt());
-            map.put(" updatedAt",  VccType.getUpdatedAt());
-            map.put(" isHottest",  VccType.getIsHottest());
-            map.put(" icon",  VccType.getIcon());
+            map.put(" name",  vccType.getName());
+            map.put(" parentId",  vccType.getParentId());
+            map.put(" ancestry",  vccType.getAncestry());
+            map.put(" createdAt",  vccType.getCreatedAt());
+            map.put(" updatedAt",  vccType.getUpdatedAt());
+            map.put(" isHottest",  vccType.getIsHottest());
+            map.put(" icon",  vccType.getIcon());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Company;
 import me.zhengjie.modules.biz.service.CompanyService;
 import me.zhengjie.modules.biz.service.dto.CompanyQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "company管理")
-@RequestMapping("/api/Company")
+@Api(tags = "Company管理")
+@RequestMapping("/api/company")
 public class CompanyController {
 
-    private final CompanyService CompanyService;
+    private final CompanyService companyService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Company:list')")
+    @PreAuthorize("@el.check('company:list')")
     public void download(HttpServletResponse response, CompanyQueryCriteria criteria) throws IOException {
-        CompanyService.download(CompanyService.queryAll(criteria), response);
+        companyService.download(companyService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询company")
-    @ApiOperation("查询company")
-    @PreAuthorize("@el.check('Company:list')")
+    @Log("查询Company")
+    @ApiOperation("查询Company")
+    @PreAuthorize("@el.check('company:list')")
     public ResponseEntity<Object> query(CompanyQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CompanyService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(companyService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增company")
-    @ApiOperation("新增company")
-    @PreAuthorize("@el.check('Company:add')")
+    @Log("新增Company")
+    @ApiOperation("新增Company")
+    @PreAuthorize("@el.check('company:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Company resources){
-        return new ResponseEntity<>(CompanyService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(companyService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改company")
-    @ApiOperation("修改company")
-    @PreAuthorize("@el.check('Company:edit')")
+    @Log("修改Company")
+    @ApiOperation("修改Company")
+    @PreAuthorize("@el.check('company:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Company resources){
-        CompanyService.update(resources);
+        companyService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除company")
-    @ApiOperation("删除company")
-    @PreAuthorize("@el.check('Company:del')")
+    @Log("删除Company")
+    @ApiOperation("删除Company")
+    @PreAuthorize("@el.check('company:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CompanyService.deleteAll(ids);
+        companyService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

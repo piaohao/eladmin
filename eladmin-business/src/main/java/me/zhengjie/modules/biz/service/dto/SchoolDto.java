@@ -16,14 +16,13 @@
 package me.zhengjie.modules.biz.service.dto;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 /**
 * @website https://el-admin.vip
 * @description /
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Data
 public class SchoolDto implements Serializable {

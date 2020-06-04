@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Education;
 import me.zhengjie.modules.biz.service.EducationService;
 import me.zhengjie.modules.biz.service.dto.EducationQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "education管理")
-@RequestMapping("/api/Education")
+@Api(tags = "Education管理")
+@RequestMapping("/api/education")
 public class EducationController {
 
-    private final EducationService EducationService;
+    private final EducationService educationService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Education:list')")
+    @PreAuthorize("@el.check('education:list')")
     public void download(HttpServletResponse response, EducationQueryCriteria criteria) throws IOException {
-        EducationService.download(EducationService.queryAll(criteria), response);
+        educationService.download(educationService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询education")
-    @ApiOperation("查询education")
-    @PreAuthorize("@el.check('Education:list')")
+    @Log("查询Education")
+    @ApiOperation("查询Education")
+    @PreAuthorize("@el.check('education:list')")
     public ResponseEntity<Object> query(EducationQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(EducationService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(educationService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增education")
-    @ApiOperation("新增education")
-    @PreAuthorize("@el.check('Education:add')")
+    @Log("新增Education")
+    @ApiOperation("新增Education")
+    @PreAuthorize("@el.check('education:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Education resources){
-        return new ResponseEntity<>(EducationService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(educationService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改education")
-    @ApiOperation("修改education")
-    @PreAuthorize("@el.check('Education:edit')")
+    @Log("修改Education")
+    @ApiOperation("修改Education")
+    @PreAuthorize("@el.check('education:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Education resources){
-        EducationService.update(resources);
+        educationService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除education")
-    @ApiOperation("删除education")
-    @PreAuthorize("@el.check('Education:del')")
+    @Log("删除Education")
+    @ApiOperation("删除Education")
+    @PreAuthorize("@el.check('education:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        EducationService.deleteAll(ids);
+        educationService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

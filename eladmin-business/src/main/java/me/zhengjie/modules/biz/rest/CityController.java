@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.City;
 import me.zhengjie.modules.biz.service.CityService;
 import me.zhengjie.modules.biz.service.dto.CityQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "city管理")
-@RequestMapping("/api/City")
+@Api(tags = "City管理")
+@RequestMapping("/api/city")
 public class CityController {
 
-    private final CityService CityService;
+    private final CityService cityService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('City:list')")
+    @PreAuthorize("@el.check('city:list')")
     public void download(HttpServletResponse response, CityQueryCriteria criteria) throws IOException {
-        CityService.download(CityService.queryAll(criteria), response);
+        cityService.download(cityService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询city")
-    @ApiOperation("查询city")
-    @PreAuthorize("@el.check('City:list')")
+    @Log("查询City")
+    @ApiOperation("查询City")
+    @PreAuthorize("@el.check('city:list')")
     public ResponseEntity<Object> query(CityQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CityService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(cityService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增city")
-    @ApiOperation("新增city")
-    @PreAuthorize("@el.check('City:add')")
+    @Log("新增City")
+    @ApiOperation("新增City")
+    @PreAuthorize("@el.check('city:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody City resources){
-        return new ResponseEntity<>(CityService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(cityService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改city")
-    @ApiOperation("修改city")
-    @PreAuthorize("@el.check('City:edit')")
+    @Log("修改City")
+    @ApiOperation("修改City")
+    @PreAuthorize("@el.check('city:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody City resources){
-        CityService.update(resources);
+        cityService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除city")
-    @ApiOperation("删除city")
-    @PreAuthorize("@el.check('City:del')")
+    @Log("删除City")
+    @ApiOperation("删除City")
+    @PreAuthorize("@el.check('city:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CityService.deleteAll(ids);
+        cityService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

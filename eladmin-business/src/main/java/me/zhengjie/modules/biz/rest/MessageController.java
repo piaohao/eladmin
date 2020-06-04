@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Message;
 import me.zhengjie.modules.biz.service.MessageService;
 import me.zhengjie.modules.biz.service.dto.MessageQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "message管理")
-@RequestMapping("/api/Message")
+@Api(tags = "Message管理")
+@RequestMapping("/api/message")
 public class MessageController {
 
-    private final MessageService MessageService;
+    private final MessageService messageService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Message:list')")
+    @PreAuthorize("@el.check('message:list')")
     public void download(HttpServletResponse response, MessageQueryCriteria criteria) throws IOException {
-        MessageService.download(MessageService.queryAll(criteria), response);
+        messageService.download(messageService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询message")
-    @ApiOperation("查询message")
-    @PreAuthorize("@el.check('Message:list')")
+    @Log("查询Message")
+    @ApiOperation("查询Message")
+    @PreAuthorize("@el.check('message:list')")
     public ResponseEntity<Object> query(MessageQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(MessageService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(messageService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增message")
-    @ApiOperation("新增message")
-    @PreAuthorize("@el.check('Message:add')")
+    @Log("新增Message")
+    @ApiOperation("新增Message")
+    @PreAuthorize("@el.check('message:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Message resources){
-        return new ResponseEntity<>(MessageService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(messageService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改message")
-    @ApiOperation("修改message")
-    @PreAuthorize("@el.check('Message:edit')")
+    @Log("修改Message")
+    @ApiOperation("修改Message")
+    @PreAuthorize("@el.check('message:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Message resources){
-        MessageService.update(resources);
+        messageService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除message")
-    @ApiOperation("删除message")
-    @PreAuthorize("@el.check('Message:del')")
+    @Log("删除Message")
+    @ApiOperation("删除Message")
+    @PreAuthorize("@el.check('message:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        MessageService.deleteAll(ids);
+        messageService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

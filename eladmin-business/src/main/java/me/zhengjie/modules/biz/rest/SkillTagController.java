@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.SkillTag;
 import me.zhengjie.modules.biz.service.SkillTagService;
 import me.zhengjie.modules.biz.service.dto.SkillTagQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "skill_tag管理")
-@RequestMapping("/api/SkillTag")
+@Api(tags = "SkillTag管理")
+@RequestMapping("/api/skillTag")
 public class SkillTagController {
 
-    private final SkillTagService SkillTagService;
+    private final SkillTagService skillTagService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('SkillTag:list')")
+    @PreAuthorize("@el.check('skillTag:list')")
     public void download(HttpServletResponse response, SkillTagQueryCriteria criteria) throws IOException {
-        SkillTagService.download(SkillTagService.queryAll(criteria), response);
+        skillTagService.download(skillTagService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询skill_tag")
-    @ApiOperation("查询skill_tag")
-    @PreAuthorize("@el.check('SkillTag:list')")
+    @Log("查询SkillTag")
+    @ApiOperation("查询SkillTag")
+    @PreAuthorize("@el.check('skillTag:list')")
     public ResponseEntity<Object> query(SkillTagQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(SkillTagService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(skillTagService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增skill_tag")
-    @ApiOperation("新增skill_tag")
-    @PreAuthorize("@el.check('SkillTag:add')")
+    @Log("新增SkillTag")
+    @ApiOperation("新增SkillTag")
+    @PreAuthorize("@el.check('skillTag:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SkillTag resources){
-        return new ResponseEntity<>(SkillTagService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(skillTagService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改skill_tag")
-    @ApiOperation("修改skill_tag")
-    @PreAuthorize("@el.check('SkillTag:edit')")
+    @Log("修改SkillTag")
+    @ApiOperation("修改SkillTag")
+    @PreAuthorize("@el.check('skillTag:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody SkillTag resources){
-        SkillTagService.update(resources);
+        skillTagService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除skill_tag")
-    @ApiOperation("删除skill_tag")
-    @PreAuthorize("@el.check('SkillTag:del')")
+    @Log("删除SkillTag")
+    @ApiOperation("删除SkillTag")
+    @PreAuthorize("@el.check('skillTag:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        SkillTagService.deleteAll(ids);
+        skillTagService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

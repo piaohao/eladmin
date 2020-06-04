@@ -15,96 +15,95 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.VerifyCode;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.VerifyCodeRepository;
 import me.zhengjie.modules.biz.service.VerifyCodeService;
 import me.zhengjie.modules.biz.service.dto.VerifyCodeDto;
 import me.zhengjie.modules.biz.service.dto.VerifyCodeQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.VerifyCodeMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class VerifyCodeServiceImpl implements VerifyCodeService {
 
-    private final VerifyCodeRepository VerifyCodeRepository;
-    private final VerifyCodeMapper VerifyCodeMapper;
+    private final VerifyCodeRepository verifyCodeRepository;
+    private final VerifyCodeMapper verifyCodeMapper;
 
     @Override
     public Map<String,Object> queryAll(VerifyCodeQueryCriteria criteria, Pageable pageable){
-        Page<VerifyCode> page = VerifyCodeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(VerifyCodeMapper::toDto));
+        Page<VerifyCode> page = verifyCodeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(verifyCodeMapper::toDto));
     }
 
     @Override
     public List<VerifyCodeDto> queryAll(VerifyCodeQueryCriteria criteria){
-        return VerifyCodeMapper.toDto(VerifyCodeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return verifyCodeMapper.toDto(verifyCodeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public VerifyCodeDto findById(Long id) {
-        VerifyCode VerifyCode = VerifyCodeRepository.findById(id).orElseGet(VerifyCode::new);
-        ValidationUtil.isNull(VerifyCode.getId(),"VerifyCode","id",id);
-        return VerifyCodeMapper.toDto(VerifyCode);
+        VerifyCode verifyCode = verifyCodeRepository.findById(id).orElseGet(VerifyCode::new);
+        ValidationUtil.isNull(verifyCode.getId(),"VerifyCode","id",id);
+        return verifyCodeMapper.toDto(verifyCode);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public VerifyCodeDto create(VerifyCode resources) {
-        return VerifyCodeMapper.toDto(VerifyCodeRepository.save(resources));
+        return verifyCodeMapper.toDto(verifyCodeRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(VerifyCode resources) {
-        VerifyCode VerifyCode = VerifyCodeRepository.findById(resources.getId()).orElseGet(VerifyCode::new);
-        ValidationUtil.isNull( VerifyCode.getId(),"VerifyCode","id",resources.getId());
-        BeanUtil.copyProperties(resources, VerifyCode, CopyOptions.create().setIgnoreNullValue(true));
-        VerifyCodeRepository.save(VerifyCode);
+        VerifyCode verifyCode = verifyCodeRepository.findById(resources.getId()).orElseGet(VerifyCode::new);
+        ValidationUtil.isNull( verifyCode.getId(),"VerifyCode","id",resources.getId());
+        BeanUtil.copyProperties(resources, verifyCode, CopyOptions.create().setIgnoreNullValue(true));
+        verifyCodeRepository.save(verifyCode);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            VerifyCodeRepository.deleteById(id);
+            verifyCodeRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<VerifyCodeDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (VerifyCodeDto VerifyCode : all) {
+        for (VerifyCodeDto verifyCode : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" mobile",  VerifyCode.getMobile());
-            map.put(" chn",  VerifyCode.getChn());
-            map.put(" val",  VerifyCode.getVal());
-            map.put(" expAt",  VerifyCode.getExpAt());
-            map.put(" createdAt",  VerifyCode.getCreatedAt());
-            map.put(" updatedAt",  VerifyCode.getUpdatedAt());
+            map.put(" mobile",  verifyCode.getMobile());
+            map.put(" chn",  verifyCode.getChn());
+            map.put(" val",  verifyCode.getVal());
+            map.put(" expAt",  verifyCode.getExpAt());
+            map.put(" createdAt",  verifyCode.getCreatedAt());
+            map.put(" updatedAt",  verifyCode.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

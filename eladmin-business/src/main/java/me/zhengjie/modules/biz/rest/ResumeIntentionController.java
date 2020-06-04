@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeIntention;
 import me.zhengjie.modules.biz.service.ResumeIntentionService;
 import me.zhengjie.modules.biz.service.dto.ResumeIntentionQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_intention管理")
-@RequestMapping("/api/ResumeIntention")
+@Api(tags = "ResumeIntention管理")
+@RequestMapping("/api/resumeIntention")
 public class ResumeIntentionController {
 
-    private final ResumeIntentionService ResumeIntentionService;
+    private final ResumeIntentionService resumeIntentionService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeIntention:list')")
+    @PreAuthorize("@el.check('resumeIntention:list')")
     public void download(HttpServletResponse response, ResumeIntentionQueryCriteria criteria) throws IOException {
-        ResumeIntentionService.download(ResumeIntentionService.queryAll(criteria), response);
+        resumeIntentionService.download(resumeIntentionService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_intention")
-    @ApiOperation("查询resume_intention")
-    @PreAuthorize("@el.check('ResumeIntention:list')")
+    @Log("查询ResumeIntention")
+    @ApiOperation("查询ResumeIntention")
+    @PreAuthorize("@el.check('resumeIntention:list')")
     public ResponseEntity<Object> query(ResumeIntentionQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeIntentionService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeIntentionService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_intention")
-    @ApiOperation("新增resume_intention")
-    @PreAuthorize("@el.check('ResumeIntention:add')")
+    @Log("新增ResumeIntention")
+    @ApiOperation("新增ResumeIntention")
+    @PreAuthorize("@el.check('resumeIntention:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeIntention resources){
-        return new ResponseEntity<>(ResumeIntentionService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeIntentionService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_intention")
-    @ApiOperation("修改resume_intention")
-    @PreAuthorize("@el.check('ResumeIntention:edit')")
+    @Log("修改ResumeIntention")
+    @ApiOperation("修改ResumeIntention")
+    @PreAuthorize("@el.check('resumeIntention:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeIntention resources){
-        ResumeIntentionService.update(resources);
+        resumeIntentionService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_intention")
-    @ApiOperation("删除resume_intention")
-    @PreAuthorize("@el.check('ResumeIntention:del')")
+    @Log("删除ResumeIntention")
+    @ApiOperation("删除ResumeIntention")
+    @PreAuthorize("@el.check('resumeIntention:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeIntentionService.deleteAll(ids);
+        resumeIntentionService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

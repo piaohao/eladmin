@@ -16,11 +16,13 @@
 package me.zhengjie.modules.biz.service.dto;
 
 import lombok.Data;
+import java.util.List;
+import me.zhengjie.annotation.Query;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Data
 public class MessageQueryCriteria{

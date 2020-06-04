@@ -15,94 +15,93 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.VacancyBookmark;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.VacancyBookmarkRepository;
 import me.zhengjie.modules.biz.service.VacancyBookmarkService;
 import me.zhengjie.modules.biz.service.dto.VacancyBookmarkDto;
 import me.zhengjie.modules.biz.service.dto.VacancyBookmarkQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.VacancyBookmarkMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class VacancyBookmarkServiceImpl implements VacancyBookmarkService {
 
-    private final VacancyBookmarkRepository VacancyBookmarkRepository;
-    private final VacancyBookmarkMapper VacancyBookmarkMapper;
+    private final VacancyBookmarkRepository vacancyBookmarkRepository;
+    private final VacancyBookmarkMapper vacancyBookmarkMapper;
 
     @Override
     public Map<String,Object> queryAll(VacancyBookmarkQueryCriteria criteria, Pageable pageable){
-        Page<VacancyBookmark> page = VacancyBookmarkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(VacancyBookmarkMapper::toDto));
+        Page<VacancyBookmark> page = vacancyBookmarkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(vacancyBookmarkMapper::toDto));
     }
 
     @Override
     public List<VacancyBookmarkDto> queryAll(VacancyBookmarkQueryCriteria criteria){
-        return VacancyBookmarkMapper.toDto(VacancyBookmarkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return vacancyBookmarkMapper.toDto(vacancyBookmarkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public VacancyBookmarkDto findById(Long id) {
-        VacancyBookmark VacancyBookmark = VacancyBookmarkRepository.findById(id).orElseGet(VacancyBookmark::new);
-        ValidationUtil.isNull(VacancyBookmark.getId(),"VacancyBookmark","id",id);
-        return VacancyBookmarkMapper.toDto(VacancyBookmark);
+        VacancyBookmark vacancyBookmark = vacancyBookmarkRepository.findById(id).orElseGet(VacancyBookmark::new);
+        ValidationUtil.isNull(vacancyBookmark.getId(),"VacancyBookmark","id",id);
+        return vacancyBookmarkMapper.toDto(vacancyBookmark);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public VacancyBookmarkDto create(VacancyBookmark resources) {
-        return VacancyBookmarkMapper.toDto(VacancyBookmarkRepository.save(resources));
+        return vacancyBookmarkMapper.toDto(vacancyBookmarkRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(VacancyBookmark resources) {
-        VacancyBookmark VacancyBookmark = VacancyBookmarkRepository.findById(resources.getId()).orElseGet(VacancyBookmark::new);
-        ValidationUtil.isNull( VacancyBookmark.getId(),"VacancyBookmark","id",resources.getId());
-        BeanUtil.copyProperties(resources, VacancyBookmark, CopyOptions.create().setIgnoreNullValue(true));
-        VacancyBookmarkRepository.save(VacancyBookmark);
+        VacancyBookmark vacancyBookmark = vacancyBookmarkRepository.findById(resources.getId()).orElseGet(VacancyBookmark::new);
+        ValidationUtil.isNull( vacancyBookmark.getId(),"VacancyBookmark","id",resources.getId());
+        BeanUtil.copyProperties(resources, vacancyBookmark, CopyOptions.create().setIgnoreNullValue(true));
+        vacancyBookmarkRepository.save(vacancyBookmark);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            VacancyBookmarkRepository.deleteById(id);
+            vacancyBookmarkRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<VacancyBookmarkDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (VacancyBookmarkDto VacancyBookmark : all) {
+        for (VacancyBookmarkDto vacancyBookmark : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" vacancyId",  VacancyBookmark.getVacancyId());
-            map.put(" studentUserId",  VacancyBookmark.getStudentUserId());
-            map.put(" createdAt",  VacancyBookmark.getCreatedAt());
-            map.put(" updatedAt",  VacancyBookmark.getUpdatedAt());
+            map.put(" vacancyId",  vacancyBookmark.getVacancyId());
+            map.put(" studentUserId",  vacancyBookmark.getStudentUserId());
+            map.put(" createdAt",  vacancyBookmark.getCreatedAt());
+            map.put(" updatedAt",  vacancyBookmark.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

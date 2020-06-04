@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeProject;
 import me.zhengjie.modules.biz.service.ResumeProjectService;
 import me.zhengjie.modules.biz.service.dto.ResumeProjectQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_project管理")
-@RequestMapping("/api/ResumeProject")
+@Api(tags = "ResumeProject管理")
+@RequestMapping("/api/resumeProject")
 public class ResumeProjectController {
 
-    private final ResumeProjectService ResumeProjectService;
+    private final ResumeProjectService resumeProjectService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeProject:list')")
+    @PreAuthorize("@el.check('resumeProject:list')")
     public void download(HttpServletResponse response, ResumeProjectQueryCriteria criteria) throws IOException {
-        ResumeProjectService.download(ResumeProjectService.queryAll(criteria), response);
+        resumeProjectService.download(resumeProjectService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_project")
-    @ApiOperation("查询resume_project")
-    @PreAuthorize("@el.check('ResumeProject:list')")
+    @Log("查询ResumeProject")
+    @ApiOperation("查询ResumeProject")
+    @PreAuthorize("@el.check('resumeProject:list')")
     public ResponseEntity<Object> query(ResumeProjectQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeProjectService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeProjectService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_project")
-    @ApiOperation("新增resume_project")
-    @PreAuthorize("@el.check('ResumeProject:add')")
+    @Log("新增ResumeProject")
+    @ApiOperation("新增ResumeProject")
+    @PreAuthorize("@el.check('resumeProject:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeProject resources){
-        return new ResponseEntity<>(ResumeProjectService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeProjectService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_project")
-    @ApiOperation("修改resume_project")
-    @PreAuthorize("@el.check('ResumeProject:edit')")
+    @Log("修改ResumeProject")
+    @ApiOperation("修改ResumeProject")
+    @PreAuthorize("@el.check('resumeProject:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeProject resources){
-        ResumeProjectService.update(resources);
+        resumeProjectService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_project")
-    @ApiOperation("删除resume_project")
-    @PreAuthorize("@el.check('ResumeProject:del')")
+    @Log("删除ResumeProject")
+    @ApiOperation("删除ResumeProject")
+    @PreAuthorize("@el.check('resumeProject:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeProjectService.deleteAll(ids);
+        resumeProjectService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

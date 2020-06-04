@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 public interface CompanyMessageRepository extends JpaRepository<CompanyMessage, Long>, JpaSpecificationExecutor<CompanyMessage> {
 }

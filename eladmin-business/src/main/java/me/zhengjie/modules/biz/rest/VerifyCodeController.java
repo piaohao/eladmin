@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.VerifyCode;
 import me.zhengjie.modules.biz.service.VerifyCodeService;
 import me.zhengjie.modules.biz.service.dto.VerifyCodeQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "verify_code管理")
-@RequestMapping("/api/VerifyCode")
+@Api(tags = "VerifyCode管理")
+@RequestMapping("/api/verifyCode")
 public class VerifyCodeController {
 
-    private final VerifyCodeService VerifyCodeService;
+    private final VerifyCodeService verifyCodeService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('VerifyCode:list')")
+    @PreAuthorize("@el.check('verifyCode:list')")
     public void download(HttpServletResponse response, VerifyCodeQueryCriteria criteria) throws IOException {
-        VerifyCodeService.download(VerifyCodeService.queryAll(criteria), response);
+        verifyCodeService.download(verifyCodeService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询verify_code")
-    @ApiOperation("查询verify_code")
-    @PreAuthorize("@el.check('VerifyCode:list')")
+    @Log("查询VerifyCode")
+    @ApiOperation("查询VerifyCode")
+    @PreAuthorize("@el.check('verifyCode:list')")
     public ResponseEntity<Object> query(VerifyCodeQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(VerifyCodeService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(verifyCodeService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增verify_code")
-    @ApiOperation("新增verify_code")
-    @PreAuthorize("@el.check('VerifyCode:add')")
+    @Log("新增VerifyCode")
+    @ApiOperation("新增VerifyCode")
+    @PreAuthorize("@el.check('verifyCode:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody VerifyCode resources){
-        return new ResponseEntity<>(VerifyCodeService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(verifyCodeService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改verify_code")
-    @ApiOperation("修改verify_code")
-    @PreAuthorize("@el.check('VerifyCode:edit')")
+    @Log("修改VerifyCode")
+    @ApiOperation("修改VerifyCode")
+    @PreAuthorize("@el.check('verifyCode:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody VerifyCode resources){
-        VerifyCodeService.update(resources);
+        verifyCodeService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除verify_code")
-    @ApiOperation("删除verify_code")
-    @PreAuthorize("@el.check('VerifyCode:del')")
+    @Log("删除VerifyCode")
+    @ApiOperation("删除VerifyCode")
+    @PreAuthorize("@el.check('verifyCode:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        VerifyCodeService.deleteAll(ids);
+        verifyCodeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

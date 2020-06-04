@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.CompanyFollowing;
 import me.zhengjie.modules.biz.service.CompanyFollowingService;
 import me.zhengjie.modules.biz.service.dto.CompanyFollowingQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "company_following管理")
-@RequestMapping("/api/CompanyFollowing")
+@Api(tags = "CompanyFollowing管理")
+@RequestMapping("/api/companyFollowing")
 public class CompanyFollowingController {
 
-    private final CompanyFollowingService CompanyFollowingService;
+    private final CompanyFollowingService companyFollowingService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('CompanyFollowing:list')")
+    @PreAuthorize("@el.check('companyFollowing:list')")
     public void download(HttpServletResponse response, CompanyFollowingQueryCriteria criteria) throws IOException {
-        CompanyFollowingService.download(CompanyFollowingService.queryAll(criteria), response);
+        companyFollowingService.download(companyFollowingService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询company_following")
-    @ApiOperation("查询company_following")
-    @PreAuthorize("@el.check('CompanyFollowing:list')")
+    @Log("查询CompanyFollowing")
+    @ApiOperation("查询CompanyFollowing")
+    @PreAuthorize("@el.check('companyFollowing:list')")
     public ResponseEntity<Object> query(CompanyFollowingQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CompanyFollowingService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(companyFollowingService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增company_following")
-    @ApiOperation("新增company_following")
-    @PreAuthorize("@el.check('CompanyFollowing:add')")
+    @Log("新增CompanyFollowing")
+    @ApiOperation("新增CompanyFollowing")
+    @PreAuthorize("@el.check('companyFollowing:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody CompanyFollowing resources){
-        return new ResponseEntity<>(CompanyFollowingService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(companyFollowingService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改company_following")
-    @ApiOperation("修改company_following")
-    @PreAuthorize("@el.check('CompanyFollowing:edit')")
+    @Log("修改CompanyFollowing")
+    @ApiOperation("修改CompanyFollowing")
+    @PreAuthorize("@el.check('companyFollowing:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody CompanyFollowing resources){
-        CompanyFollowingService.update(resources);
+        companyFollowingService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除company_following")
-    @ApiOperation("删除company_following")
-    @PreAuthorize("@el.check('CompanyFollowing:del')")
+    @Log("删除CompanyFollowing")
+    @ApiOperation("删除CompanyFollowing")
+    @PreAuthorize("@el.check('companyFollowing:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CompanyFollowingService.deleteAll(ids);
+        companyFollowingService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

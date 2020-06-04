@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.SalaryType;
 import me.zhengjie.modules.biz.service.SalaryTypeService;
 import me.zhengjie.modules.biz.service.dto.SalaryTypeQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "salary_type管理")
-@RequestMapping("/api/SalaryType")
+@Api(tags = "SalaryType管理")
+@RequestMapping("/api/salaryType")
 public class SalaryTypeController {
 
-    private final SalaryTypeService SalaryTypeService;
+    private final SalaryTypeService salaryTypeService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('SalaryType:list')")
+    @PreAuthorize("@el.check('salaryType:list')")
     public void download(HttpServletResponse response, SalaryTypeQueryCriteria criteria) throws IOException {
-        SalaryTypeService.download(SalaryTypeService.queryAll(criteria), response);
+        salaryTypeService.download(salaryTypeService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询salary_type")
-    @ApiOperation("查询salary_type")
-    @PreAuthorize("@el.check('SalaryType:list')")
+    @Log("查询SalaryType")
+    @ApiOperation("查询SalaryType")
+    @PreAuthorize("@el.check('salaryType:list')")
     public ResponseEntity<Object> query(SalaryTypeQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(SalaryTypeService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(salaryTypeService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增salary_type")
-    @ApiOperation("新增salary_type")
-    @PreAuthorize("@el.check('SalaryType:add')")
+    @Log("新增SalaryType")
+    @ApiOperation("新增SalaryType")
+    @PreAuthorize("@el.check('salaryType:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SalaryType resources){
-        return new ResponseEntity<>(SalaryTypeService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(salaryTypeService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改salary_type")
-    @ApiOperation("修改salary_type")
-    @PreAuthorize("@el.check('SalaryType:edit')")
+    @Log("修改SalaryType")
+    @ApiOperation("修改SalaryType")
+    @PreAuthorize("@el.check('salaryType:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody SalaryType resources){
-        SalaryTypeService.update(resources);
+        salaryTypeService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除salary_type")
-    @ApiOperation("删除salary_type")
-    @PreAuthorize("@el.check('SalaryType:del')")
+    @Log("删除SalaryType")
+    @ApiOperation("删除SalaryType")
+    @PreAuthorize("@el.check('salaryType:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        SalaryTypeService.deleteAll(ids);
+        salaryTypeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

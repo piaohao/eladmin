@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import crud${className} from '@/api/${changeClassName}'
+import crud${className} from '@/api/${moduleName}/${changeClassName}'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'

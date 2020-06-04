@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.VacancyWorkplace;
 import me.zhengjie.modules.biz.service.VacancyWorkplaceService;
 import me.zhengjie.modules.biz.service.dto.VacancyWorkplaceQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "vacancy_workplace管理")
-@RequestMapping("/api/VacancyWorkplace")
+@Api(tags = "VacancyWorkplace管理")
+@RequestMapping("/api/vacancyWorkplace")
 public class VacancyWorkplaceController {
 
-    private final VacancyWorkplaceService VacancyWorkplaceService;
+    private final VacancyWorkplaceService vacancyWorkplaceService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('VacancyWorkplace:list')")
+    @PreAuthorize("@el.check('vacancyWorkplace:list')")
     public void download(HttpServletResponse response, VacancyWorkplaceQueryCriteria criteria) throws IOException {
-        VacancyWorkplaceService.download(VacancyWorkplaceService.queryAll(criteria), response);
+        vacancyWorkplaceService.download(vacancyWorkplaceService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询vacancy_workplace")
-    @ApiOperation("查询vacancy_workplace")
-    @PreAuthorize("@el.check('VacancyWorkplace:list')")
+    @Log("查询VacancyWorkplace")
+    @ApiOperation("查询VacancyWorkplace")
+    @PreAuthorize("@el.check('vacancyWorkplace:list')")
     public ResponseEntity<Object> query(VacancyWorkplaceQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(VacancyWorkplaceService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(vacancyWorkplaceService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增vacancy_workplace")
-    @ApiOperation("新增vacancy_workplace")
-    @PreAuthorize("@el.check('VacancyWorkplace:add')")
+    @Log("新增VacancyWorkplace")
+    @ApiOperation("新增VacancyWorkplace")
+    @PreAuthorize("@el.check('vacancyWorkplace:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody VacancyWorkplace resources){
-        return new ResponseEntity<>(VacancyWorkplaceService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(vacancyWorkplaceService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改vacancy_workplace")
-    @ApiOperation("修改vacancy_workplace")
-    @PreAuthorize("@el.check('VacancyWorkplace:edit')")
+    @Log("修改VacancyWorkplace")
+    @ApiOperation("修改VacancyWorkplace")
+    @PreAuthorize("@el.check('vacancyWorkplace:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody VacancyWorkplace resources){
-        VacancyWorkplaceService.update(resources);
+        vacancyWorkplaceService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除vacancy_workplace")
-    @ApiOperation("删除vacancy_workplace")
-    @PreAuthorize("@el.check('VacancyWorkplace:del')")
+    @Log("删除VacancyWorkplace")
+    @ApiOperation("删除VacancyWorkplace")
+    @PreAuthorize("@el.check('vacancyWorkplace:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        VacancyWorkplaceService.deleteAll(ids);
+        vacancyWorkplaceService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

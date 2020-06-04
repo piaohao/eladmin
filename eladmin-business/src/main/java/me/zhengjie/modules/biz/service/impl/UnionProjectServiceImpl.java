@@ -15,99 +15,98 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.UnionProject;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.UnionProjectRepository;
 import me.zhengjie.modules.biz.service.UnionProjectService;
 import me.zhengjie.modules.biz.service.dto.UnionProjectDto;
 import me.zhengjie.modules.biz.service.dto.UnionProjectQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.UnionProjectMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class UnionProjectServiceImpl implements UnionProjectService {
 
-    private final UnionProjectRepository UnionProjectRepository;
-    private final UnionProjectMapper UnionProjectMapper;
+    private final UnionProjectRepository unionProjectRepository;
+    private final UnionProjectMapper unionProjectMapper;
 
     @Override
     public Map<String,Object> queryAll(UnionProjectQueryCriteria criteria, Pageable pageable){
-        Page<UnionProject> page = UnionProjectRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(UnionProjectMapper::toDto));
+        Page<UnionProject> page = unionProjectRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(unionProjectMapper::toDto));
     }
 
     @Override
     public List<UnionProjectDto> queryAll(UnionProjectQueryCriteria criteria){
-        return UnionProjectMapper.toDto(UnionProjectRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return unionProjectMapper.toDto(unionProjectRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public UnionProjectDto findById(Long id) {
-        UnionProject UnionProject = UnionProjectRepository.findById(id).orElseGet(UnionProject::new);
-        ValidationUtil.isNull(UnionProject.getId(),"UnionProject","id",id);
-        return UnionProjectMapper.toDto(UnionProject);
+        UnionProject unionProject = unionProjectRepository.findById(id).orElseGet(UnionProject::new);
+        ValidationUtil.isNull(unionProject.getId(),"UnionProject","id",id);
+        return unionProjectMapper.toDto(unionProject);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UnionProjectDto create(UnionProject resources) {
-        return UnionProjectMapper.toDto(UnionProjectRepository.save(resources));
+        return unionProjectMapper.toDto(unionProjectRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(UnionProject resources) {
-        UnionProject UnionProject = UnionProjectRepository.findById(resources.getId()).orElseGet(UnionProject::new);
-        ValidationUtil.isNull( UnionProject.getId(),"UnionProject","id",resources.getId());
-        BeanUtil.copyProperties(resources, UnionProject, CopyOptions.create().setIgnoreNullValue(true));
-        UnionProjectRepository.save(UnionProject);
+        UnionProject unionProject = unionProjectRepository.findById(resources.getId()).orElseGet(UnionProject::new);
+        ValidationUtil.isNull( unionProject.getId(),"UnionProject","id",resources.getId());
+        BeanUtil.copyProperties(resources, unionProject, CopyOptions.create().setIgnoreNullValue(true));
+        unionProjectRepository.save(unionProject);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            UnionProjectRepository.deleteById(id);
+            unionProjectRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<UnionProjectDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (UnionProjectDto UnionProject : all) {
+        for (UnionProjectDto unionProject : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" schoolId",  UnionProject.getSchoolId());
-            map.put("学院id", UnionProject.getCollegeId());
-            map.put(" companyId",  UnionProject.getCompanyId());
-            map.put("职位id", UnionProject.getVacancyId());
-            map.put(" coType",  UnionProject.getCoType());
-            map.put(" coDuration",  UnionProject.getCoDuration());
-            map.put(" status",  UnionProject.getStatus());
-            map.put(" createdAt",  UnionProject.getCreatedAt());
-            map.put(" updatedAt",  UnionProject.getUpdatedAt());
+            map.put(" schoolId",  unionProject.getSchoolId());
+            map.put("学院id", unionProject.getCollegeId());
+            map.put(" companyId",  unionProject.getCompanyId());
+            map.put("职位id", unionProject.getVacancyId());
+            map.put(" coType",  unionProject.getCoType());
+            map.put(" coDuration",  unionProject.getCoDuration());
+            map.put(" status",  unionProject.getStatus());
+            map.put(" createdAt",  unionProject.getCreatedAt());
+            map.put(" updatedAt",  unionProject.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.VccType;
 import me.zhengjie.modules.biz.service.VccTypeService;
 import me.zhengjie.modules.biz.service.dto.VccTypeQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "vcc_type管理")
-@RequestMapping("/api/VccType")
+@Api(tags = "VccType管理")
+@RequestMapping("/api/vccType")
 public class VccTypeController {
 
-    private final VccTypeService VccTypeService;
+    private final VccTypeService vccTypeService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('VccType:list')")
+    @PreAuthorize("@el.check('vccType:list')")
     public void download(HttpServletResponse response, VccTypeQueryCriteria criteria) throws IOException {
-        VccTypeService.download(VccTypeService.queryAll(criteria), response);
+        vccTypeService.download(vccTypeService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询vcc_type")
-    @ApiOperation("查询vcc_type")
-    @PreAuthorize("@el.check('VccType:list')")
+    @Log("查询VccType")
+    @ApiOperation("查询VccType")
+    @PreAuthorize("@el.check('vccType:list')")
     public ResponseEntity<Object> query(VccTypeQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(VccTypeService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(vccTypeService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增vcc_type")
-    @ApiOperation("新增vcc_type")
-    @PreAuthorize("@el.check('VccType:add')")
+    @Log("新增VccType")
+    @ApiOperation("新增VccType")
+    @PreAuthorize("@el.check('vccType:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody VccType resources){
-        return new ResponseEntity<>(VccTypeService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(vccTypeService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改vcc_type")
-    @ApiOperation("修改vcc_type")
-    @PreAuthorize("@el.check('VccType:edit')")
+    @Log("修改VccType")
+    @ApiOperation("修改VccType")
+    @PreAuthorize("@el.check('vccType:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody VccType resources){
-        VccTypeService.update(resources);
+        vccTypeService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除vcc_type")
-    @ApiOperation("删除vcc_type")
-    @PreAuthorize("@el.check('VccType:del')")
+    @Log("删除VccType")
+    @ApiOperation("删除VccType")
+    @PreAuthorize("@el.check('vccType:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        VccTypeService.deleteAll(ids);
+        vccTypeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

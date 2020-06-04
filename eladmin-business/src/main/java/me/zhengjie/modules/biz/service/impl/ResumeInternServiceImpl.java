@@ -15,97 +15,96 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.ResumeIntern;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.ResumeInternRepository;
 import me.zhengjie.modules.biz.service.ResumeInternService;
 import me.zhengjie.modules.biz.service.dto.ResumeInternDto;
 import me.zhengjie.modules.biz.service.dto.ResumeInternQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.ResumeInternMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class ResumeInternServiceImpl implements ResumeInternService {
 
-    private final ResumeInternRepository ResumeInternRepository;
-    private final ResumeInternMapper ResumeInternMapper;
+    private final ResumeInternRepository resumeInternRepository;
+    private final ResumeInternMapper resumeInternMapper;
 
     @Override
     public Map<String,Object> queryAll(ResumeInternQueryCriteria criteria, Pageable pageable){
-        Page<ResumeIntern> page = ResumeInternRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(ResumeInternMapper::toDto));
+        Page<ResumeIntern> page = resumeInternRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(resumeInternMapper::toDto));
     }
 
     @Override
     public List<ResumeInternDto> queryAll(ResumeInternQueryCriteria criteria){
-        return ResumeInternMapper.toDto(ResumeInternRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return resumeInternMapper.toDto(resumeInternRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public ResumeInternDto findById(Long id) {
-        ResumeIntern ResumeIntern = ResumeInternRepository.findById(id).orElseGet(ResumeIntern::new);
-        ValidationUtil.isNull(ResumeIntern.getId(),"ResumeIntern","id",id);
-        return ResumeInternMapper.toDto(ResumeIntern);
+        ResumeIntern resumeIntern = resumeInternRepository.findById(id).orElseGet(ResumeIntern::new);
+        ValidationUtil.isNull(resumeIntern.getId(),"ResumeIntern","id",id);
+        return resumeInternMapper.toDto(resumeIntern);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResumeInternDto create(ResumeIntern resources) {
-        return ResumeInternMapper.toDto(ResumeInternRepository.save(resources));
+        return resumeInternMapper.toDto(resumeInternRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(ResumeIntern resources) {
-        ResumeIntern ResumeIntern = ResumeInternRepository.findById(resources.getId()).orElseGet(ResumeIntern::new);
-        ValidationUtil.isNull( ResumeIntern.getId(),"ResumeIntern","id",resources.getId());
-        BeanUtil.copyProperties(resources, ResumeIntern, CopyOptions.create().setIgnoreNullValue(true));
-        ResumeInternRepository.save(ResumeIntern);
+        ResumeIntern resumeIntern = resumeInternRepository.findById(resources.getId()).orElseGet(ResumeIntern::new);
+        ValidationUtil.isNull( resumeIntern.getId(),"ResumeIntern","id",resources.getId());
+        BeanUtil.copyProperties(resources, resumeIntern, CopyOptions.create().setIgnoreNullValue(true));
+        resumeInternRepository.save(resumeIntern);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            ResumeInternRepository.deleteById(id);
+            resumeInternRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<ResumeInternDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (ResumeInternDto ResumeIntern : all) {
+        for (ResumeInternDto resumeIntern : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" resumeId",  ResumeIntern.getResumeId());
-            map.put(" company",  ResumeIntern.getCompany());
-            map.put(" industry",  ResumeIntern.getIndustry());
-            map.put(" entryTime",  ResumeIntern.getEntryTime());
-            map.put(" resignationTime",  ResumeIntern.getResignationTime());
-            map.put(" position",  ResumeIntern.getPosition());
-            map.put(" jobContent",  ResumeIntern.getJobContent());
+            map.put(" resumeId",  resumeIntern.getResumeId());
+            map.put(" company",  resumeIntern.getCompany());
+            map.put(" industry",  resumeIntern.getIndustry());
+            map.put(" entryTime",  resumeIntern.getEntryTime());
+            map.put(" resignationTime",  resumeIntern.getResignationTime());
+            map.put(" position",  resumeIntern.getPosition());
+            map.put(" jobContent",  resumeIntern.getJobContent());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

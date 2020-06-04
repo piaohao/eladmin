@@ -15,99 +15,98 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.ResumeEducation;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.ResumeEducationRepository;
 import me.zhengjie.modules.biz.service.ResumeEducationService;
 import me.zhengjie.modules.biz.service.dto.ResumeEducationDto;
 import me.zhengjie.modules.biz.service.dto.ResumeEducationQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.ResumeEducationMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class ResumeEducationServiceImpl implements ResumeEducationService {
 
-    private final ResumeEducationRepository ResumeEducationRepository;
-    private final ResumeEducationMapper ResumeEducationMapper;
+    private final ResumeEducationRepository resumeEducationRepository;
+    private final ResumeEducationMapper resumeEducationMapper;
 
     @Override
     public Map<String,Object> queryAll(ResumeEducationQueryCriteria criteria, Pageable pageable){
-        Page<ResumeEducation> page = ResumeEducationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(ResumeEducationMapper::toDto));
+        Page<ResumeEducation> page = resumeEducationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(resumeEducationMapper::toDto));
     }
 
     @Override
     public List<ResumeEducationDto> queryAll(ResumeEducationQueryCriteria criteria){
-        return ResumeEducationMapper.toDto(ResumeEducationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return resumeEducationMapper.toDto(resumeEducationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public ResumeEducationDto findById(Long id) {
-        ResumeEducation ResumeEducation = ResumeEducationRepository.findById(id).orElseGet(ResumeEducation::new);
-        ValidationUtil.isNull(ResumeEducation.getId(),"ResumeEducation","id",id);
-        return ResumeEducationMapper.toDto(ResumeEducation);
+        ResumeEducation resumeEducation = resumeEducationRepository.findById(id).orElseGet(ResumeEducation::new);
+        ValidationUtil.isNull(resumeEducation.getId(),"ResumeEducation","id",id);
+        return resumeEducationMapper.toDto(resumeEducation);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResumeEducationDto create(ResumeEducation resources) {
-        return ResumeEducationMapper.toDto(ResumeEducationRepository.save(resources));
+        return resumeEducationMapper.toDto(resumeEducationRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(ResumeEducation resources) {
-        ResumeEducation ResumeEducation = ResumeEducationRepository.findById(resources.getId()).orElseGet(ResumeEducation::new);
-        ValidationUtil.isNull( ResumeEducation.getId(),"ResumeEducation","id",resources.getId());
-        BeanUtil.copyProperties(resources, ResumeEducation, CopyOptions.create().setIgnoreNullValue(true));
-        ResumeEducationRepository.save(ResumeEducation);
+        ResumeEducation resumeEducation = resumeEducationRepository.findById(resources.getId()).orElseGet(ResumeEducation::new);
+        ValidationUtil.isNull( resumeEducation.getId(),"ResumeEducation","id",resources.getId());
+        BeanUtil.copyProperties(resources, resumeEducation, CopyOptions.create().setIgnoreNullValue(true));
+        resumeEducationRepository.save(resumeEducation);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            ResumeEducationRepository.deleteById(id);
+            resumeEducationRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<ResumeEducationDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (ResumeEducationDto ResumeEducation : all) {
+        for (ResumeEducationDto resumeEducation : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" resumeId",  ResumeEducation.getResumeId());
-            map.put(" school",  ResumeEducation.getSchool());
-            map.put(" major",  ResumeEducation.getMajor());
-            map.put(" education",  ResumeEducation.getEducation());
-            map.put(" enrollmentTime",  ResumeEducation.getEnrollmentTime());
-            map.put(" graduationTime",  ResumeEducation.getGraduationTime());
-            map.put(" gpa",  ResumeEducation.getGpa());
-            map.put(" scoreRanking",  ResumeEducation.getScoreRanking());
-            map.put(" majorCourse",  ResumeEducation.getMajorCourse());
+            map.put(" resumeId",  resumeEducation.getResumeId());
+            map.put(" school",  resumeEducation.getSchool());
+            map.put(" major",  resumeEducation.getMajor());
+            map.put(" education",  resumeEducation.getEducation());
+            map.put(" enrollmentTime",  resumeEducation.getEnrollmentTime());
+            map.put(" graduationTime",  resumeEducation.getGraduationTime());
+            map.put(" gpa",  resumeEducation.getGpa());
+            map.put(" scoreRanking",  resumeEducation.getScoreRanking());
+            map.put(" majorCourse",  resumeEducation.getMajorCourse());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

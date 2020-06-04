@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.District;
 import me.zhengjie.modules.biz.service.DistrictService;
 import me.zhengjie.modules.biz.service.dto.DistrictQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "district管理")
-@RequestMapping("/api/District")
+@Api(tags = "District管理")
+@RequestMapping("/api/district")
 public class DistrictController {
 
-    private final DistrictService DistrictService;
+    private final DistrictService districtService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('District:list')")
+    @PreAuthorize("@el.check('district:list')")
     public void download(HttpServletResponse response, DistrictQueryCriteria criteria) throws IOException {
-        DistrictService.download(DistrictService.queryAll(criteria), response);
+        districtService.download(districtService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询district")
-    @ApiOperation("查询district")
-    @PreAuthorize("@el.check('District:list')")
+    @Log("查询District")
+    @ApiOperation("查询District")
+    @PreAuthorize("@el.check('district:list')")
     public ResponseEntity<Object> query(DistrictQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(DistrictService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(districtService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增district")
-    @ApiOperation("新增district")
-    @PreAuthorize("@el.check('District:add')")
+    @Log("新增District")
+    @ApiOperation("新增District")
+    @PreAuthorize("@el.check('district:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody District resources){
-        return new ResponseEntity<>(DistrictService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(districtService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改district")
-    @ApiOperation("修改district")
-    @PreAuthorize("@el.check('District:edit')")
+    @Log("修改District")
+    @ApiOperation("修改District")
+    @PreAuthorize("@el.check('district:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody District resources){
-        DistrictService.update(resources);
+        districtService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除district")
-    @ApiOperation("删除district")
-    @PreAuthorize("@el.check('District:del')")
+    @Log("删除District")
+    @ApiOperation("删除District")
+    @PreAuthorize("@el.check('district:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        DistrictService.deleteAll(ids);
+        districtService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

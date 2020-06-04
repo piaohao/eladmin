@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Mentor;
 import me.zhengjie.modules.biz.service.MentorService;
 import me.zhengjie.modules.biz.service.dto.MentorQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "mentor管理")
-@RequestMapping("/api/Mentor")
+@Api(tags = "Mentor管理")
+@RequestMapping("/api/mentor")
 public class MentorController {
 
-    private final MentorService MentorService;
+    private final MentorService mentorService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Mentor:list')")
+    @PreAuthorize("@el.check('mentor:list')")
     public void download(HttpServletResponse response, MentorQueryCriteria criteria) throws IOException {
-        MentorService.download(MentorService.queryAll(criteria), response);
+        mentorService.download(mentorService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询mentor")
-    @ApiOperation("查询mentor")
-    @PreAuthorize("@el.check('Mentor:list')")
+    @Log("查询Mentor")
+    @ApiOperation("查询Mentor")
+    @PreAuthorize("@el.check('mentor:list')")
     public ResponseEntity<Object> query(MentorQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(MentorService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(mentorService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增mentor")
-    @ApiOperation("新增mentor")
-    @PreAuthorize("@el.check('Mentor:add')")
+    @Log("新增Mentor")
+    @ApiOperation("新增Mentor")
+    @PreAuthorize("@el.check('mentor:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Mentor resources){
-        return new ResponseEntity<>(MentorService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(mentorService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改mentor")
-    @ApiOperation("修改mentor")
-    @PreAuthorize("@el.check('Mentor:edit')")
+    @Log("修改Mentor")
+    @ApiOperation("修改Mentor")
+    @PreAuthorize("@el.check('mentor:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Mentor resources){
-        MentorService.update(resources);
+        mentorService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除mentor")
-    @ApiOperation("删除mentor")
-    @PreAuthorize("@el.check('Mentor:del')")
+    @Log("删除Mentor")
+    @ApiOperation("删除Mentor")
+    @PreAuthorize("@el.check('mentor:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        MentorService.deleteAll(ids);
+        mentorService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

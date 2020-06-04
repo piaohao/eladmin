@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.UnionProject;
 import me.zhengjie.modules.biz.service.UnionProjectService;
 import me.zhengjie.modules.biz.service.dto.UnionProjectQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "union_project管理")
-@RequestMapping("/api/UnionProject")
+@Api(tags = "UnionProject管理")
+@RequestMapping("/api/unionProject")
 public class UnionProjectController {
 
-    private final UnionProjectService UnionProjectService;
+    private final UnionProjectService unionProjectService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('UnionProject:list')")
+    @PreAuthorize("@el.check('unionProject:list')")
     public void download(HttpServletResponse response, UnionProjectQueryCriteria criteria) throws IOException {
-        UnionProjectService.download(UnionProjectService.queryAll(criteria), response);
+        unionProjectService.download(unionProjectService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询union_project")
-    @ApiOperation("查询union_project")
-    @PreAuthorize("@el.check('UnionProject:list')")
+    @Log("查询UnionProject")
+    @ApiOperation("查询UnionProject")
+    @PreAuthorize("@el.check('unionProject:list')")
     public ResponseEntity<Object> query(UnionProjectQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(UnionProjectService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(unionProjectService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增union_project")
-    @ApiOperation("新增union_project")
-    @PreAuthorize("@el.check('UnionProject:add')")
+    @Log("新增UnionProject")
+    @ApiOperation("新增UnionProject")
+    @PreAuthorize("@el.check('unionProject:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody UnionProject resources){
-        return new ResponseEntity<>(UnionProjectService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(unionProjectService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改union_project")
-    @ApiOperation("修改union_project")
-    @PreAuthorize("@el.check('UnionProject:edit')")
+    @Log("修改UnionProject")
+    @ApiOperation("修改UnionProject")
+    @PreAuthorize("@el.check('unionProject:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody UnionProject resources){
-        UnionProjectService.update(resources);
+        unionProjectService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除union_project")
-    @ApiOperation("删除union_project")
-    @PreAuthorize("@el.check('UnionProject:del')")
+    @Log("删除UnionProject")
+    @ApiOperation("删除UnionProject")
+    @PreAuthorize("@el.check('unionProject:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        UnionProjectService.deleteAll(ids);
+        unionProjectService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

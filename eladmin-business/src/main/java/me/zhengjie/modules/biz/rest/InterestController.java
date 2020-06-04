@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Interest;
 import me.zhengjie.modules.biz.service.InterestService;
 import me.zhengjie.modules.biz.service.dto.InterestQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "interest管理")
-@RequestMapping("/api/Interest")
+@Api(tags = "Interest管理")
+@RequestMapping("/api/interest")
 public class InterestController {
 
-    private final InterestService InterestService;
+    private final InterestService interestService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Interest:list')")
+    @PreAuthorize("@el.check('interest:list')")
     public void download(HttpServletResponse response, InterestQueryCriteria criteria) throws IOException {
-        InterestService.download(InterestService.queryAll(criteria), response);
+        interestService.download(interestService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询interest")
-    @ApiOperation("查询interest")
-    @PreAuthorize("@el.check('Interest:list')")
+    @Log("查询Interest")
+    @ApiOperation("查询Interest")
+    @PreAuthorize("@el.check('interest:list')")
     public ResponseEntity<Object> query(InterestQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(InterestService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(interestService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增interest")
-    @ApiOperation("新增interest")
-    @PreAuthorize("@el.check('Interest:add')")
+    @Log("新增Interest")
+    @ApiOperation("新增Interest")
+    @PreAuthorize("@el.check('interest:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Interest resources){
-        return new ResponseEntity<>(InterestService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(interestService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改interest")
-    @ApiOperation("修改interest")
-    @PreAuthorize("@el.check('Interest:edit')")
+    @Log("修改Interest")
+    @ApiOperation("修改Interest")
+    @PreAuthorize("@el.check('interest:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Interest resources){
-        InterestService.update(resources);
+        interestService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除interest")
-    @ApiOperation("删除interest")
-    @PreAuthorize("@el.check('Interest:del')")
+    @Log("删除Interest")
+    @ApiOperation("删除Interest")
+    @PreAuthorize("@el.check('interest:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        InterestService.deleteAll(ids);
+        interestService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.CompanyWelfare;
 import me.zhengjie.modules.biz.service.CompanyWelfareService;
 import me.zhengjie.modules.biz.service.dto.CompanyWelfareQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "company_welfare管理")
-@RequestMapping("/api/CompanyWelfare")
+@Api(tags = "CompanyWelfare管理")
+@RequestMapping("/api/companyWelfare")
 public class CompanyWelfareController {
 
-    private final CompanyWelfareService CompanyWelfareService;
+    private final CompanyWelfareService companyWelfareService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('CompanyWelfare:list')")
+    @PreAuthorize("@el.check('companyWelfare:list')")
     public void download(HttpServletResponse response, CompanyWelfareQueryCriteria criteria) throws IOException {
-        CompanyWelfareService.download(CompanyWelfareService.queryAll(criteria), response);
+        companyWelfareService.download(companyWelfareService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询company_welfare")
-    @ApiOperation("查询company_welfare")
-    @PreAuthorize("@el.check('CompanyWelfare:list')")
+    @Log("查询CompanyWelfare")
+    @ApiOperation("查询CompanyWelfare")
+    @PreAuthorize("@el.check('companyWelfare:list')")
     public ResponseEntity<Object> query(CompanyWelfareQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(CompanyWelfareService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(companyWelfareService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增company_welfare")
-    @ApiOperation("新增company_welfare")
-    @PreAuthorize("@el.check('CompanyWelfare:add')")
+    @Log("新增CompanyWelfare")
+    @ApiOperation("新增CompanyWelfare")
+    @PreAuthorize("@el.check('companyWelfare:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody CompanyWelfare resources){
-        return new ResponseEntity<>(CompanyWelfareService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(companyWelfareService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改company_welfare")
-    @ApiOperation("修改company_welfare")
-    @PreAuthorize("@el.check('CompanyWelfare:edit')")
+    @Log("修改CompanyWelfare")
+    @ApiOperation("修改CompanyWelfare")
+    @PreAuthorize("@el.check('companyWelfare:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody CompanyWelfare resources){
-        CompanyWelfareService.update(resources);
+        companyWelfareService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除company_welfare")
-    @ApiOperation("删除company_welfare")
-    @PreAuthorize("@el.check('CompanyWelfare:del')")
+    @Log("删除CompanyWelfare")
+    @ApiOperation("删除CompanyWelfare")
+    @PreAuthorize("@el.check('companyWelfare:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        CompanyWelfareService.deleteAll(ids);
+        companyWelfareService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

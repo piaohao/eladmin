@@ -15,94 +15,93 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.District;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.DistrictRepository;
 import me.zhengjie.modules.biz.service.DistrictService;
 import me.zhengjie.modules.biz.service.dto.DistrictDto;
 import me.zhengjie.modules.biz.service.dto.DistrictQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.DistrictMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class DistrictServiceImpl implements DistrictService {
 
-    private final DistrictRepository DistrictRepository;
-    private final DistrictMapper DistrictMapper;
+    private final DistrictRepository districtRepository;
+    private final DistrictMapper districtMapper;
 
     @Override
     public Map<String,Object> queryAll(DistrictQueryCriteria criteria, Pageable pageable){
-        Page<District> page = DistrictRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(DistrictMapper::toDto));
+        Page<District> page = districtRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(districtMapper::toDto));
     }
 
     @Override
     public List<DistrictDto> queryAll(DistrictQueryCriteria criteria){
-        return DistrictMapper.toDto(DistrictRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return districtMapper.toDto(districtRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public DistrictDto findById(Long id) {
-        District District = DistrictRepository.findById(id).orElseGet(District::new);
-        ValidationUtil.isNull(District.getId(),"District","id",id);
-        return DistrictMapper.toDto(District);
+        District district = districtRepository.findById(id).orElseGet(District::new);
+        ValidationUtil.isNull(district.getId(),"District","id",id);
+        return districtMapper.toDto(district);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public DistrictDto create(District resources) {
-        return DistrictMapper.toDto(DistrictRepository.save(resources));
+        return districtMapper.toDto(districtRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(District resources) {
-        District District = DistrictRepository.findById(resources.getId()).orElseGet(District::new);
-        ValidationUtil.isNull( District.getId(),"District","id",resources.getId());
-        BeanUtil.copyProperties(resources, District, CopyOptions.create().setIgnoreNullValue(true));
-        DistrictRepository.save(District);
+        District district = districtRepository.findById(resources.getId()).orElseGet(District::new);
+        ValidationUtil.isNull( district.getId(),"District","id",resources.getId());
+        BeanUtil.copyProperties(resources, district, CopyOptions.create().setIgnoreNullValue(true));
+        districtRepository.save(district);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            DistrictRepository.deleteById(id);
+            districtRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<DistrictDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (DistrictDto District : all) {
+        for (DistrictDto district : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" cityId",  District.getCityId());
-            map.put(" name",  District.getName());
-            map.put(" createdAt",  District.getCreatedAt());
-            map.put(" updatedAt",  District.getUpdatedAt());
+            map.put(" cityId",  district.getCityId());
+            map.put(" name",  district.getName());
+            map.put(" createdAt",  district.getCreatedAt());
+            map.put(" updatedAt",  district.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

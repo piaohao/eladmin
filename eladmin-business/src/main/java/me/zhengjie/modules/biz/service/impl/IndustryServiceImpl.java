@@ -15,93 +15,92 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.Industry;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.IndustryRepository;
 import me.zhengjie.modules.biz.service.IndustryService;
 import me.zhengjie.modules.biz.service.dto.IndustryDto;
 import me.zhengjie.modules.biz.service.dto.IndustryQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.IndustryMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class IndustryServiceImpl implements IndustryService {
 
-    private final IndustryRepository IndustryRepository;
-    private final IndustryMapper IndustryMapper;
+    private final IndustryRepository industryRepository;
+    private final IndustryMapper industryMapper;
 
     @Override
     public Map<String,Object> queryAll(IndustryQueryCriteria criteria, Pageable pageable){
-        Page<Industry> page = IndustryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(IndustryMapper::toDto));
+        Page<Industry> page = industryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(industryMapper::toDto));
     }
 
     @Override
     public List<IndustryDto> queryAll(IndustryQueryCriteria criteria){
-        return IndustryMapper.toDto(IndustryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return industryMapper.toDto(industryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public IndustryDto findById(Long id) {
-        Industry Industry = IndustryRepository.findById(id).orElseGet(Industry::new);
-        ValidationUtil.isNull(Industry.getId(),"Industry","id",id);
-        return IndustryMapper.toDto(Industry);
+        Industry industry = industryRepository.findById(id).orElseGet(Industry::new);
+        ValidationUtil.isNull(industry.getId(),"Industry","id",id);
+        return industryMapper.toDto(industry);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public IndustryDto create(Industry resources) {
-        return IndustryMapper.toDto(IndustryRepository.save(resources));
+        return industryMapper.toDto(industryRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Industry resources) {
-        Industry Industry = IndustryRepository.findById(resources.getId()).orElseGet(Industry::new);
-        ValidationUtil.isNull( Industry.getId(),"Industry","id",resources.getId());
-        BeanUtil.copyProperties(resources, Industry, CopyOptions.create().setIgnoreNullValue(true));
-        IndustryRepository.save(Industry);
+        Industry industry = industryRepository.findById(resources.getId()).orElseGet(Industry::new);
+        ValidationUtil.isNull( industry.getId(),"Industry","id",resources.getId());
+        BeanUtil.copyProperties(resources, industry, CopyOptions.create().setIgnoreNullValue(true));
+        industryRepository.save(industry);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            IndustryRepository.deleteById(id);
+            industryRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<IndustryDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (IndustryDto Industry : all) {
+        for (IndustryDto industry : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" name",  Industry.getName());
-            map.put(" createdAt",  Industry.getCreatedAt());
-            map.put(" updatedAt",  Industry.getUpdatedAt());
+            map.put(" name",  industry.getName());
+            map.put(" createdAt",  industry.getCreatedAt());
+            map.put(" updatedAt",  industry.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

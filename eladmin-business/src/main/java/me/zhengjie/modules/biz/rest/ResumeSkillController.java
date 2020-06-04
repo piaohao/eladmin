@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeSkill;
 import me.zhengjie.modules.biz.service.ResumeSkillService;
 import me.zhengjie.modules.biz.service.dto.ResumeSkillQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_skill管理")
-@RequestMapping("/api/ResumeSkill")
+@Api(tags = "ResumeSkill管理")
+@RequestMapping("/api/resumeSkill")
 public class ResumeSkillController {
 
-    private final ResumeSkillService ResumeSkillService;
+    private final ResumeSkillService resumeSkillService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeSkill:list')")
+    @PreAuthorize("@el.check('resumeSkill:list')")
     public void download(HttpServletResponse response, ResumeSkillQueryCriteria criteria) throws IOException {
-        ResumeSkillService.download(ResumeSkillService.queryAll(criteria), response);
+        resumeSkillService.download(resumeSkillService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_skill")
-    @ApiOperation("查询resume_skill")
-    @PreAuthorize("@el.check('ResumeSkill:list')")
+    @Log("查询ResumeSkill")
+    @ApiOperation("查询ResumeSkill")
+    @PreAuthorize("@el.check('resumeSkill:list')")
     public ResponseEntity<Object> query(ResumeSkillQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeSkillService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeSkillService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_skill")
-    @ApiOperation("新增resume_skill")
-    @PreAuthorize("@el.check('ResumeSkill:add')")
+    @Log("新增ResumeSkill")
+    @ApiOperation("新增ResumeSkill")
+    @PreAuthorize("@el.check('resumeSkill:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeSkill resources){
-        return new ResponseEntity<>(ResumeSkillService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeSkillService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_skill")
-    @ApiOperation("修改resume_skill")
-    @PreAuthorize("@el.check('ResumeSkill:edit')")
+    @Log("修改ResumeSkill")
+    @ApiOperation("修改ResumeSkill")
+    @PreAuthorize("@el.check('resumeSkill:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeSkill resources){
-        ResumeSkillService.update(resources);
+        resumeSkillService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_skill")
-    @ApiOperation("删除resume_skill")
-    @PreAuthorize("@el.check('ResumeSkill:del')")
+    @Log("删除ResumeSkill")
+    @ApiOperation("删除ResumeSkill")
+    @PreAuthorize("@el.check('resumeSkill:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeSkillService.deleteAll(ids);
+        resumeSkillService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

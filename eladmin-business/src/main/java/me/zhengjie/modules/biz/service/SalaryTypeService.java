@@ -19,17 +19,16 @@ import me.zhengjie.api.domain.biz.SalaryType;
 import me.zhengjie.modules.biz.service.dto.SalaryTypeDto;
 import me.zhengjie.modules.biz.service.dto.SalaryTypeQueryCriteria;
 import org.springframework.data.domain.Pageable;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @description 服务接口
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 public interface SalaryTypeService {
 

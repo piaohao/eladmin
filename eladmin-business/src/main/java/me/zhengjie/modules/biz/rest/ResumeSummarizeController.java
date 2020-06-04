@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumeSummarize;
 import me.zhengjie.modules.biz.service.ResumeSummarizeService;
 import me.zhengjie.modules.biz.service.dto.ResumeSummarizeQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_summarize管理")
-@RequestMapping("/api/ResumeSummarize")
+@Api(tags = "ResumeSummarize管理")
+@RequestMapping("/api/resumeSummarize")
 public class ResumeSummarizeController {
 
-    private final ResumeSummarizeService ResumeSummarizeService;
+    private final ResumeSummarizeService resumeSummarizeService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumeSummarize:list')")
+    @PreAuthorize("@el.check('resumeSummarize:list')")
     public void download(HttpServletResponse response, ResumeSummarizeQueryCriteria criteria) throws IOException {
-        ResumeSummarizeService.download(ResumeSummarizeService.queryAll(criteria), response);
+        resumeSummarizeService.download(resumeSummarizeService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_summarize")
-    @ApiOperation("查询resume_summarize")
-    @PreAuthorize("@el.check('ResumeSummarize:list')")
+    @Log("查询ResumeSummarize")
+    @ApiOperation("查询ResumeSummarize")
+    @PreAuthorize("@el.check('resumeSummarize:list')")
     public ResponseEntity<Object> query(ResumeSummarizeQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumeSummarizeService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumeSummarizeService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_summarize")
-    @ApiOperation("新增resume_summarize")
-    @PreAuthorize("@el.check('ResumeSummarize:add')")
+    @Log("新增ResumeSummarize")
+    @ApiOperation("新增ResumeSummarize")
+    @PreAuthorize("@el.check('resumeSummarize:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumeSummarize resources){
-        return new ResponseEntity<>(ResumeSummarizeService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumeSummarizeService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_summarize")
-    @ApiOperation("修改resume_summarize")
-    @PreAuthorize("@el.check('ResumeSummarize:edit')")
+    @Log("修改ResumeSummarize")
+    @ApiOperation("修改ResumeSummarize")
+    @PreAuthorize("@el.check('resumeSummarize:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumeSummarize resources){
-        ResumeSummarizeService.update(resources);
+        resumeSummarizeService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_summarize")
-    @ApiOperation("删除resume_summarize")
-    @PreAuthorize("@el.check('ResumeSummarize:del')")
+    @Log("删除ResumeSummarize")
+    @ApiOperation("删除ResumeSummarize")
+    @PreAuthorize("@el.check('resumeSummarize:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumeSummarizeService.deleteAll(ids);
+        resumeSummarizeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

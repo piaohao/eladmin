@@ -15,93 +15,92 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.CompanyFinancing;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.CompanyFinancingRepository;
 import me.zhengjie.modules.biz.service.CompanyFinancingService;
 import me.zhengjie.modules.biz.service.dto.CompanyFinancingDto;
 import me.zhengjie.modules.biz.service.dto.CompanyFinancingQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.CompanyFinancingMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class CompanyFinancingServiceImpl implements CompanyFinancingService {
 
-    private final CompanyFinancingRepository CompanyFinancingRepository;
-    private final CompanyFinancingMapper CompanyFinancingMapper;
+    private final CompanyFinancingRepository companyFinancingRepository;
+    private final CompanyFinancingMapper companyFinancingMapper;
 
     @Override
     public Map<String,Object> queryAll(CompanyFinancingQueryCriteria criteria, Pageable pageable){
-        Page<CompanyFinancing> page = CompanyFinancingRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(CompanyFinancingMapper::toDto));
+        Page<CompanyFinancing> page = companyFinancingRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(companyFinancingMapper::toDto));
     }
 
     @Override
     public List<CompanyFinancingDto> queryAll(CompanyFinancingQueryCriteria criteria){
-        return CompanyFinancingMapper.toDto(CompanyFinancingRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return companyFinancingMapper.toDto(companyFinancingRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public CompanyFinancingDto findById(Long id) {
-        CompanyFinancing CompanyFinancing = CompanyFinancingRepository.findById(id).orElseGet(CompanyFinancing::new);
-        ValidationUtil.isNull(CompanyFinancing.getId(),"CompanyFinancing","id",id);
-        return CompanyFinancingMapper.toDto(CompanyFinancing);
+        CompanyFinancing companyFinancing = companyFinancingRepository.findById(id).orElseGet(CompanyFinancing::new);
+        ValidationUtil.isNull(companyFinancing.getId(),"CompanyFinancing","id",id);
+        return companyFinancingMapper.toDto(companyFinancing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CompanyFinancingDto create(CompanyFinancing resources) {
-        return CompanyFinancingMapper.toDto(CompanyFinancingRepository.save(resources));
+        return companyFinancingMapper.toDto(companyFinancingRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(CompanyFinancing resources) {
-        CompanyFinancing CompanyFinancing = CompanyFinancingRepository.findById(resources.getId()).orElseGet(CompanyFinancing::new);
-        ValidationUtil.isNull( CompanyFinancing.getId(),"CompanyFinancing","id",resources.getId());
-        BeanUtil.copyProperties(resources, CompanyFinancing, CopyOptions.create().setIgnoreNullValue(true));
-        CompanyFinancingRepository.save(CompanyFinancing);
+        CompanyFinancing companyFinancing = companyFinancingRepository.findById(resources.getId()).orElseGet(CompanyFinancing::new);
+        ValidationUtil.isNull( companyFinancing.getId(),"CompanyFinancing","id",resources.getId());
+        BeanUtil.copyProperties(resources, companyFinancing, CopyOptions.create().setIgnoreNullValue(true));
+        companyFinancingRepository.save(companyFinancing);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            CompanyFinancingRepository.deleteById(id);
+            companyFinancingRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<CompanyFinancingDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (CompanyFinancingDto CompanyFinancing : all) {
+        for (CompanyFinancingDto companyFinancing : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" name",  CompanyFinancing.getName());
-            map.put(" createdAt",  CompanyFinancing.getCreatedAt());
-            map.put(" updatedAt",  CompanyFinancing.getUpdatedAt());
+            map.put(" name",  companyFinancing.getName());
+            map.put(" createdAt",  companyFinancing.getCreatedAt());
+            map.put(" updatedAt",  companyFinancing.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

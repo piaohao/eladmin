@@ -15,94 +15,93 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.VacancySkillTag;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.VacancySkillTagRepository;
 import me.zhengjie.modules.biz.service.VacancySkillTagService;
 import me.zhengjie.modules.biz.service.dto.VacancySkillTagDto;
 import me.zhengjie.modules.biz.service.dto.VacancySkillTagQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.VacancySkillTagMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class VacancySkillTagServiceImpl implements VacancySkillTagService {
 
-    private final VacancySkillTagRepository VacancySkillTagRepository;
-    private final VacancySkillTagMapper VacancySkillTagMapper;
+    private final VacancySkillTagRepository vacancySkillTagRepository;
+    private final VacancySkillTagMapper vacancySkillTagMapper;
 
     @Override
     public Map<String,Object> queryAll(VacancySkillTagQueryCriteria criteria, Pageable pageable){
-        Page<VacancySkillTag> page = VacancySkillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(VacancySkillTagMapper::toDto));
+        Page<VacancySkillTag> page = vacancySkillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(vacancySkillTagMapper::toDto));
     }
 
     @Override
     public List<VacancySkillTagDto> queryAll(VacancySkillTagQueryCriteria criteria){
-        return VacancySkillTagMapper.toDto(VacancySkillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return vacancySkillTagMapper.toDto(vacancySkillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public VacancySkillTagDto findById(Long id) {
-        VacancySkillTag VacancySkillTag = VacancySkillTagRepository.findById(id).orElseGet(VacancySkillTag::new);
-        ValidationUtil.isNull(VacancySkillTag.getId(),"VacancySkillTag","id",id);
-        return VacancySkillTagMapper.toDto(VacancySkillTag);
+        VacancySkillTag vacancySkillTag = vacancySkillTagRepository.findById(id).orElseGet(VacancySkillTag::new);
+        ValidationUtil.isNull(vacancySkillTag.getId(),"VacancySkillTag","id",id);
+        return vacancySkillTagMapper.toDto(vacancySkillTag);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public VacancySkillTagDto create(VacancySkillTag resources) {
-        return VacancySkillTagMapper.toDto(VacancySkillTagRepository.save(resources));
+        return vacancySkillTagMapper.toDto(vacancySkillTagRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(VacancySkillTag resources) {
-        VacancySkillTag VacancySkillTag = VacancySkillTagRepository.findById(resources.getId()).orElseGet(VacancySkillTag::new);
-        ValidationUtil.isNull( VacancySkillTag.getId(),"VacancySkillTag","id",resources.getId());
-        BeanUtil.copyProperties(resources, VacancySkillTag, CopyOptions.create().setIgnoreNullValue(true));
-        VacancySkillTagRepository.save(VacancySkillTag);
+        VacancySkillTag vacancySkillTag = vacancySkillTagRepository.findById(resources.getId()).orElseGet(VacancySkillTag::new);
+        ValidationUtil.isNull( vacancySkillTag.getId(),"VacancySkillTag","id",resources.getId());
+        BeanUtil.copyProperties(resources, vacancySkillTag, CopyOptions.create().setIgnoreNullValue(true));
+        vacancySkillTagRepository.save(vacancySkillTag);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            VacancySkillTagRepository.deleteById(id);
+            vacancySkillTagRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<VacancySkillTagDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (VacancySkillTagDto VacancySkillTag : all) {
+        for (VacancySkillTagDto vacancySkillTag : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" vacancyId",  VacancySkillTag.getVacancyId());
-            map.put(" skillTagId",  VacancySkillTag.getSkillTagId());
-            map.put(" createdAt",  VacancySkillTag.getCreatedAt());
-            map.put(" updatedAt",  VacancySkillTag.getUpdatedAt());
+            map.put(" vacancyId",  vacancySkillTag.getVacancyId());
+            map.put(" skillTagId",  vacancySkillTag.getSkillTagId());
+            map.put(" createdAt",  vacancySkillTag.getCreatedAt());
+            map.put(" updatedAt",  vacancySkillTag.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ResumePrize;
 import me.zhengjie.modules.biz.service.ResumePrizeService;
 import me.zhengjie.modules.biz.service.dto.ResumePrizeQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "resume_prize管理")
-@RequestMapping("/api/ResumePrize")
+@Api(tags = "ResumePrize管理")
+@RequestMapping("/api/resumePrize")
 public class ResumePrizeController {
 
-    private final ResumePrizeService ResumePrizeService;
+    private final ResumePrizeService resumePrizeService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ResumePrize:list')")
+    @PreAuthorize("@el.check('resumePrize:list')")
     public void download(HttpServletResponse response, ResumePrizeQueryCriteria criteria) throws IOException {
-        ResumePrizeService.download(ResumePrizeService.queryAll(criteria), response);
+        resumePrizeService.download(resumePrizeService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询resume_prize")
-    @ApiOperation("查询resume_prize")
-    @PreAuthorize("@el.check('ResumePrize:list')")
+    @Log("查询ResumePrize")
+    @ApiOperation("查询ResumePrize")
+    @PreAuthorize("@el.check('resumePrize:list')")
     public ResponseEntity<Object> query(ResumePrizeQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ResumePrizeService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(resumePrizeService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增resume_prize")
-    @ApiOperation("新增resume_prize")
-    @PreAuthorize("@el.check('ResumePrize:add')")
+    @Log("新增ResumePrize")
+    @ApiOperation("新增ResumePrize")
+    @PreAuthorize("@el.check('resumePrize:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ResumePrize resources){
-        return new ResponseEntity<>(ResumePrizeService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(resumePrizeService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改resume_prize")
-    @ApiOperation("修改resume_prize")
-    @PreAuthorize("@el.check('ResumePrize:edit')")
+    @Log("修改ResumePrize")
+    @ApiOperation("修改ResumePrize")
+    @PreAuthorize("@el.check('resumePrize:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ResumePrize resources){
-        ResumePrizeService.update(resources);
+        resumePrizeService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除resume_prize")
-    @ApiOperation("删除resume_prize")
-    @PreAuthorize("@el.check('ResumePrize:del')")
+    @Log("删除ResumePrize")
+    @ApiOperation("删除ResumePrize")
+    @PreAuthorize("@el.check('resumePrize:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ResumePrizeService.deleteAll(ids);
+        resumePrizeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

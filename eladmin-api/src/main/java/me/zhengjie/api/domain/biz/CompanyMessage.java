@@ -15,18 +15,18 @@
 */
 package me.zhengjie.api.domain.biz;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
+import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
 * @website https://el-admin.vip
 * @description /
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Entity
 @Data

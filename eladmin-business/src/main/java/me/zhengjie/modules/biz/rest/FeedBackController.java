@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.FeedBack;
 import me.zhengjie.modules.biz.service.FeedBackService;
 import me.zhengjie.modules.biz.service.dto.FeedBackQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "feed_back管理")
-@RequestMapping("/api/FeedBack")
+@Api(tags = "FeedBack管理")
+@RequestMapping("/api/feedBack")
 public class FeedBackController {
 
-    private final FeedBackService FeedBackService;
+    private final FeedBackService feedBackService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('FeedBack:list')")
+    @PreAuthorize("@el.check('feedBack:list')")
     public void download(HttpServletResponse response, FeedBackQueryCriteria criteria) throws IOException {
-        FeedBackService.download(FeedBackService.queryAll(criteria), response);
+        feedBackService.download(feedBackService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询feed_back")
-    @ApiOperation("查询feed_back")
-    @PreAuthorize("@el.check('FeedBack:list')")
+    @Log("查询FeedBack")
+    @ApiOperation("查询FeedBack")
+    @PreAuthorize("@el.check('feedBack:list')")
     public ResponseEntity<Object> query(FeedBackQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(FeedBackService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(feedBackService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增feed_back")
-    @ApiOperation("新增feed_back")
-    @PreAuthorize("@el.check('FeedBack:add')")
+    @Log("新增FeedBack")
+    @ApiOperation("新增FeedBack")
+    @PreAuthorize("@el.check('feedBack:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody FeedBack resources){
-        return new ResponseEntity<>(FeedBackService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(feedBackService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改feed_back")
-    @ApiOperation("修改feed_back")
-    @PreAuthorize("@el.check('FeedBack:edit')")
+    @Log("修改FeedBack")
+    @ApiOperation("修改FeedBack")
+    @PreAuthorize("@el.check('feedBack:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody FeedBack resources){
-        FeedBackService.update(resources);
+        feedBackService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除feed_back")
-    @ApiOperation("删除feed_back")
-    @PreAuthorize("@el.check('FeedBack:del')")
+    @Log("删除FeedBack")
+    @ApiOperation("删除FeedBack")
+    @PreAuthorize("@el.check('feedBack:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        FeedBackService.deleteAll(ids);
+        feedBackService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

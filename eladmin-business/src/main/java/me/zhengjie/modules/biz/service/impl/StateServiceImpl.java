@@ -15,93 +15,92 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.State;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.StateRepository;
 import me.zhengjie.modules.biz.service.StateService;
 import me.zhengjie.modules.biz.service.dto.StateDto;
 import me.zhengjie.modules.biz.service.dto.StateQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.StateMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class StateServiceImpl implements StateService {
 
-    private final StateRepository StateRepository;
-    private final StateMapper StateMapper;
+    private final StateRepository stateRepository;
+    private final StateMapper stateMapper;
 
     @Override
     public Map<String,Object> queryAll(StateQueryCriteria criteria, Pageable pageable){
-        Page<State> page = StateRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(StateMapper::toDto));
+        Page<State> page = stateRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(stateMapper::toDto));
     }
 
     @Override
     public List<StateDto> queryAll(StateQueryCriteria criteria){
-        return StateMapper.toDto(StateRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return stateMapper.toDto(stateRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public StateDto findById(Long id) {
-        State State = StateRepository.findById(id).orElseGet(State::new);
-        ValidationUtil.isNull(State.getId(),"State","id",id);
-        return StateMapper.toDto(State);
+        State state = stateRepository.findById(id).orElseGet(State::new);
+        ValidationUtil.isNull(state.getId(),"State","id",id);
+        return stateMapper.toDto(state);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public StateDto create(State resources) {
-        return StateMapper.toDto(StateRepository.save(resources));
+        return stateMapper.toDto(stateRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(State resources) {
-        State State = StateRepository.findById(resources.getId()).orElseGet(State::new);
-        ValidationUtil.isNull( State.getId(),"State","id",resources.getId());
-        BeanUtil.copyProperties(resources, State, CopyOptions.create().setIgnoreNullValue(true));
-        StateRepository.save(State);
+        State state = stateRepository.findById(resources.getId()).orElseGet(State::new);
+        ValidationUtil.isNull( state.getId(),"State","id",resources.getId());
+        BeanUtil.copyProperties(resources, state, CopyOptions.create().setIgnoreNullValue(true));
+        stateRepository.save(state);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            StateRepository.deleteById(id);
+            stateRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<StateDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (StateDto State : all) {
+        for (StateDto state : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" name",  State.getName());
-            map.put(" createdAt",  State.getCreatedAt());
-            map.put(" updatedAt",  State.getUpdatedAt());
+            map.put(" name",  state.getName());
+            map.put(" createdAt",  state.getCreatedAt());
+            map.put(" updatedAt",  state.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

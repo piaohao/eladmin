@@ -15,95 +15,94 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.City;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.CityRepository;
 import me.zhengjie.modules.biz.service.CityService;
 import me.zhengjie.modules.biz.service.dto.CityDto;
 import me.zhengjie.modules.biz.service.dto.CityQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.CityMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
 
-    private final CityRepository CityRepository;
-    private final CityMapper CityMapper;
+    private final CityRepository cityRepository;
+    private final CityMapper cityMapper;
 
     @Override
     public Map<String,Object> queryAll(CityQueryCriteria criteria, Pageable pageable){
-        Page<City> page = CityRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(CityMapper::toDto));
+        Page<City> page = cityRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(cityMapper::toDto));
     }
 
     @Override
     public List<CityDto> queryAll(CityQueryCriteria criteria){
-        return CityMapper.toDto(CityRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return cityMapper.toDto(cityRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public CityDto findById(Long id) {
-        City City = CityRepository.findById(id).orElseGet(City::new);
-        ValidationUtil.isNull(City.getId(),"City","id",id);
-        return CityMapper.toDto(City);
+        City city = cityRepository.findById(id).orElseGet(City::new);
+        ValidationUtil.isNull(city.getId(),"City","id",id);
+        return cityMapper.toDto(city);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CityDto create(City resources) {
-        return CityMapper.toDto(CityRepository.save(resources));
+        return cityMapper.toDto(cityRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(City resources) {
-        City City = CityRepository.findById(resources.getId()).orElseGet(City::new);
-        ValidationUtil.isNull( City.getId(),"City","id",resources.getId());
-        BeanUtil.copyProperties(resources, City, CopyOptions.create().setIgnoreNullValue(true));
-        CityRepository.save(City);
+        City city = cityRepository.findById(resources.getId()).orElseGet(City::new);
+        ValidationUtil.isNull( city.getId(),"City","id",resources.getId());
+        BeanUtil.copyProperties(resources, city, CopyOptions.create().setIgnoreNullValue(true));
+        cityRepository.save(city);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            CityRepository.deleteById(id);
+            cityRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<CityDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (CityDto City : all) {
+        for (CityDto city : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" stateId",  City.getStateId());
-            map.put(" name",  City.getName());
-            map.put(" createdAt",  City.getCreatedAt());
-            map.put(" updatedAt",  City.getUpdatedAt());
-            map.put(" firstCap",  City.getFirstCap());
+            map.put(" stateId",  city.getStateId());
+            map.put(" name",  city.getName());
+            map.put(" createdAt",  city.getCreatedAt());
+            map.put(" updatedAt",  city.getUpdatedAt());
+            map.put(" firstCap",  city.getFirstCap());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

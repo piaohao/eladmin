@@ -15,109 +15,108 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.Company;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.CompanyRepository;
 import me.zhengjie.modules.biz.service.CompanyService;
 import me.zhengjie.modules.biz.service.dto.CompanyDto;
 import me.zhengjie.modules.biz.service.dto.CompanyQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.CompanyMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
-    private final CompanyRepository CompanyRepository;
-    private final CompanyMapper CompanyMapper;
+    private final CompanyRepository companyRepository;
+    private final CompanyMapper companyMapper;
 
     @Override
     public Map<String,Object> queryAll(CompanyQueryCriteria criteria, Pageable pageable){
-        Page<Company> page = CompanyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(CompanyMapper::toDto));
+        Page<Company> page = companyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(companyMapper::toDto));
     }
 
     @Override
     public List<CompanyDto> queryAll(CompanyQueryCriteria criteria){
-        return CompanyMapper.toDto(CompanyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return companyMapper.toDto(companyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public CompanyDto findById(Long id) {
-        Company Company = CompanyRepository.findById(id).orElseGet(Company::new);
-        ValidationUtil.isNull(Company.getId(),"Company","id",id);
-        return CompanyMapper.toDto(Company);
+        Company company = companyRepository.findById(id).orElseGet(Company::new);
+        ValidationUtil.isNull(company.getId(),"Company","id",id);
+        return companyMapper.toDto(company);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CompanyDto create(Company resources) {
-        return CompanyMapper.toDto(CompanyRepository.save(resources));
+        return companyMapper.toDto(companyRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Company resources) {
-        Company Company = CompanyRepository.findById(resources.getId()).orElseGet(Company::new);
-        ValidationUtil.isNull( Company.getId(),"Company","id",resources.getId());
-        BeanUtil.copyProperties(resources, Company, CopyOptions.create().setIgnoreNullValue(true));
-        CompanyRepository.save(Company);
+        Company company = companyRepository.findById(resources.getId()).orElseGet(Company::new);
+        ValidationUtil.isNull( company.getId(),"Company","id",resources.getId());
+        BeanUtil.copyProperties(resources, company, CopyOptions.create().setIgnoreNullValue(true));
+        companyRepository.save(company);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            CompanyRepository.deleteById(id);
+            companyRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<CompanyDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (CompanyDto Company : all) {
+        for (CompanyDto company : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" name",  Company.getName());
-            map.put(" logo",  Company.getLogo());
-            map.put(" address",  Company.getAddress());
-            map.put(" homePage",  Company.getHomePage());
-            map.put(" profile",  Company.getProfile());
-            map.put(" tags",  Company.getTags());
-            map.put(" photos",  Company.getPhotos());
-            map.put(" lat",  Company.getLat());
-            map.put(" lng",  Company.getLng());
-            map.put(" createdAt",  Company.getCreatedAt());
-            map.put(" updatedAt",  Company.getUpdatedAt());
-            map.put(" isStar",  Company.getIsStar());
-            map.put(" companyScaleId",  Company.getCompanyScaleId());
-            map.put(" companyFinancingId",  Company.getCompanyFinancingId());
-            map.put(" stateId",  Company.getStateId());
-            map.put(" cityId",  Company.getCityId());
-            map.put(" districtId",  Company.getDistrictId());
-            map.put(" industryId",  Company.getIndustryId());
-            map.put(" welfareId",  Company.getWelfareId());
+            map.put(" name",  company.getName());
+            map.put(" logo",  company.getLogo());
+            map.put(" address",  company.getAddress());
+            map.put(" homePage",  company.getHomePage());
+            map.put(" profile",  company.getProfile());
+            map.put(" tags",  company.getTags());
+            map.put(" photos",  company.getPhotos());
+            map.put(" lat",  company.getLat());
+            map.put(" lng",  company.getLng());
+            map.put(" createdAt",  company.getCreatedAt());
+            map.put(" updatedAt",  company.getUpdatedAt());
+            map.put(" isStar",  company.getIsStar());
+            map.put(" companyScaleId",  company.getCompanyScaleId());
+            map.put(" companyFinancingId",  company.getCompanyFinancingId());
+            map.put(" stateId",  company.getStateId());
+            map.put(" cityId",  company.getCityId());
+            map.put(" districtId",  company.getDistrictId());
+            map.put(" industryId",  company.getIndustryId());
+            map.put(" welfareId",  company.getWelfareId());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

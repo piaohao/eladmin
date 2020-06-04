@@ -15,96 +15,95 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.Message;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.MessageRepository;
 import me.zhengjie.modules.biz.service.MessageService;
 import me.zhengjie.modules.biz.service.dto.MessageDto;
 import me.zhengjie.modules.biz.service.dto.MessageQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.MessageMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
-    private final MessageRepository MessageRepository;
-    private final MessageMapper MessageMapper;
+    private final MessageRepository messageRepository;
+    private final MessageMapper messageMapper;
 
     @Override
     public Map<String,Object> queryAll(MessageQueryCriteria criteria, Pageable pageable){
-        Page<Message> page = MessageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(MessageMapper::toDto));
+        Page<Message> page = messageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(messageMapper::toDto));
     }
 
     @Override
     public List<MessageDto> queryAll(MessageQueryCriteria criteria){
-        return MessageMapper.toDto(MessageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return messageMapper.toDto(messageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public MessageDto findById(Long id) {
-        Message Message = MessageRepository.findById(id).orElseGet(Message::new);
-        ValidationUtil.isNull(Message.getId(),"Message","id",id);
-        return MessageMapper.toDto(Message);
+        Message message = messageRepository.findById(id).orElseGet(Message::new);
+        ValidationUtil.isNull(message.getId(),"Message","id",id);
+        return messageMapper.toDto(message);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public MessageDto create(Message resources) {
-        return MessageMapper.toDto(MessageRepository.save(resources));
+        return messageMapper.toDto(messageRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Message resources) {
-        Message Message = MessageRepository.findById(resources.getId()).orElseGet(Message::new);
-        ValidationUtil.isNull( Message.getId(),"Message","id",resources.getId());
-        BeanUtil.copyProperties(resources, Message, CopyOptions.create().setIgnoreNullValue(true));
-        MessageRepository.save(Message);
+        Message message = messageRepository.findById(resources.getId()).orElseGet(Message::new);
+        ValidationUtil.isNull( message.getId(),"Message","id",resources.getId());
+        BeanUtil.copyProperties(resources, message, CopyOptions.create().setIgnoreNullValue(true));
+        messageRepository.save(message);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            MessageRepository.deleteById(id);
+            messageRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<MessageDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (MessageDto Message : all) {
+        for (MessageDto message : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("消息标题", Message.getTitle());
-            map.put("消息类型,1系统公告，2职位消息，3交易消息", Message.getType());
-            map.put("消息内容", Message.getContent());
-            map.put("发送方式,1所有企业，2部分企业", Message.getDelivery());
-            map.put(" createdAt",  Message.getCreatedAt());
-            map.put(" updatedAt",  Message.getUpdatedAt());
+            map.put("消息标题", message.getTitle());
+            map.put("消息类型,1系统公告，2职位消息，3交易消息", message.getType());
+            map.put("消息内容", message.getContent());
+            map.put("发送方式,1所有企业，2部分企业", message.getDelivery());
+            map.put(" createdAt",  message.getCreatedAt());
+            map.put(" updatedAt",  message.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

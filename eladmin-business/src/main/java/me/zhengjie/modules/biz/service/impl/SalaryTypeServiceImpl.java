@@ -15,93 +15,92 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.SalaryType;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.SalaryTypeRepository;
 import me.zhengjie.modules.biz.service.SalaryTypeService;
 import me.zhengjie.modules.biz.service.dto.SalaryTypeDto;
 import me.zhengjie.modules.biz.service.dto.SalaryTypeQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.SalaryTypeMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class SalaryTypeServiceImpl implements SalaryTypeService {
 
-    private final SalaryTypeRepository SalaryTypeRepository;
-    private final SalaryTypeMapper SalaryTypeMapper;
+    private final SalaryTypeRepository salaryTypeRepository;
+    private final SalaryTypeMapper salaryTypeMapper;
 
     @Override
     public Map<String,Object> queryAll(SalaryTypeQueryCriteria criteria, Pageable pageable){
-        Page<SalaryType> page = SalaryTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(SalaryTypeMapper::toDto));
+        Page<SalaryType> page = salaryTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(salaryTypeMapper::toDto));
     }
 
     @Override
     public List<SalaryTypeDto> queryAll(SalaryTypeQueryCriteria criteria){
-        return SalaryTypeMapper.toDto(SalaryTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return salaryTypeMapper.toDto(salaryTypeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public SalaryTypeDto findById(Long id) {
-        SalaryType SalaryType = SalaryTypeRepository.findById(id).orElseGet(SalaryType::new);
-        ValidationUtil.isNull(SalaryType.getId(),"SalaryType","id",id);
-        return SalaryTypeMapper.toDto(SalaryType);
+        SalaryType salaryType = salaryTypeRepository.findById(id).orElseGet(SalaryType::new);
+        ValidationUtil.isNull(salaryType.getId(),"SalaryType","id",id);
+        return salaryTypeMapper.toDto(salaryType);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SalaryTypeDto create(SalaryType resources) {
-        return SalaryTypeMapper.toDto(SalaryTypeRepository.save(resources));
+        return salaryTypeMapper.toDto(salaryTypeRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SalaryType resources) {
-        SalaryType SalaryType = SalaryTypeRepository.findById(resources.getId()).orElseGet(SalaryType::new);
-        ValidationUtil.isNull( SalaryType.getId(),"SalaryType","id",resources.getId());
-        BeanUtil.copyProperties(resources, SalaryType, CopyOptions.create().setIgnoreNullValue(true));
-        SalaryTypeRepository.save(SalaryType);
+        SalaryType salaryType = salaryTypeRepository.findById(resources.getId()).orElseGet(SalaryType::new);
+        ValidationUtil.isNull( salaryType.getId(),"SalaryType","id",resources.getId());
+        BeanUtil.copyProperties(resources, salaryType, CopyOptions.create().setIgnoreNullValue(true));
+        salaryTypeRepository.save(salaryType);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            SalaryTypeRepository.deleteById(id);
+            salaryTypeRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<SalaryTypeDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (SalaryTypeDto SalaryType : all) {
+        for (SalaryTypeDto salaryType : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("日，月，年", SalaryType.getType());
-            map.put(" low",  SalaryType.getLow());
-            map.put(" high",  SalaryType.getHigh());
+            map.put("日，月，年", salaryType.getType());
+            map.put(" low",  salaryType.getLow());
+            map.put(" high",  salaryType.getHigh());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -15,98 +15,97 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.FeedBack;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.FeedBackRepository;
 import me.zhengjie.modules.biz.service.FeedBackService;
 import me.zhengjie.modules.biz.service.dto.FeedBackDto;
 import me.zhengjie.modules.biz.service.dto.FeedBackQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.FeedBackMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class FeedBackServiceImpl implements FeedBackService {
 
-    private final FeedBackRepository FeedBackRepository;
-    private final FeedBackMapper FeedBackMapper;
+    private final FeedBackRepository feedBackRepository;
+    private final FeedBackMapper feedBackMapper;
 
     @Override
     public Map<String,Object> queryAll(FeedBackQueryCriteria criteria, Pageable pageable){
-        Page<FeedBack> page = FeedBackRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(FeedBackMapper::toDto));
+        Page<FeedBack> page = feedBackRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(feedBackMapper::toDto));
     }
 
     @Override
     public List<FeedBackDto> queryAll(FeedBackQueryCriteria criteria){
-        return FeedBackMapper.toDto(FeedBackRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return feedBackMapper.toDto(feedBackRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public FeedBackDto findById(Long id) {
-        FeedBack FeedBack = FeedBackRepository.findById(id).orElseGet(FeedBack::new);
-        ValidationUtil.isNull(FeedBack.getId(),"FeedBack","id",id);
-        return FeedBackMapper.toDto(FeedBack);
+        FeedBack feedBack = feedBackRepository.findById(id).orElseGet(FeedBack::new);
+        ValidationUtil.isNull(feedBack.getId(),"FeedBack","id",id);
+        return feedBackMapper.toDto(feedBack);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public FeedBackDto create(FeedBack resources) {
-        return FeedBackMapper.toDto(FeedBackRepository.save(resources));
+        return feedBackMapper.toDto(feedBackRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(FeedBack resources) {
-        FeedBack FeedBack = FeedBackRepository.findById(resources.getId()).orElseGet(FeedBack::new);
-        ValidationUtil.isNull( FeedBack.getId(),"FeedBack","id",resources.getId());
-        BeanUtil.copyProperties(resources, FeedBack, CopyOptions.create().setIgnoreNullValue(true));
-        FeedBackRepository.save(FeedBack);
+        FeedBack feedBack = feedBackRepository.findById(resources.getId()).orElseGet(FeedBack::new);
+        ValidationUtil.isNull( feedBack.getId(),"FeedBack","id",resources.getId());
+        BeanUtil.copyProperties(resources, feedBack, CopyOptions.create().setIgnoreNullValue(true));
+        feedBackRepository.save(feedBack);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            FeedBackRepository.deleteById(id);
+            feedBackRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<FeedBackDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (FeedBackDto FeedBack : all) {
+        for (FeedBackDto feedBack : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" studentUserId",  FeedBack.getStudentUserId());
-            map.put(" type",  FeedBack.getType());
-            map.put(" content",  FeedBack.getContent());
-            map.put(" mobile",  FeedBack.getMobile());
-            map.put(" images",  FeedBack.getImages());
-            map.put(" allowContact",  FeedBack.getAllowContact());
-            map.put(" createdAt",  FeedBack.getCreatedAt());
-            map.put(" updatedAt",  FeedBack.getUpdatedAt());
+            map.put(" studentUserId",  feedBack.getStudentUserId());
+            map.put(" type",  feedBack.getType());
+            map.put(" content",  feedBack.getContent());
+            map.put(" mobile",  feedBack.getMobile());
+            map.put(" images",  feedBack.getImages());
+            map.put(" allowContact",  feedBack.getAllowContact());
+            map.put(" createdAt",  feedBack.getCreatedAt());
+            map.put(" updatedAt",  feedBack.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

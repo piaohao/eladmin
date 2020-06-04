@@ -15,95 +15,94 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.Banner;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.BannerRepository;
 import me.zhengjie.modules.biz.service.BannerService;
 import me.zhengjie.modules.biz.service.dto.BannerDto;
 import me.zhengjie.modules.biz.service.dto.BannerQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.BannerMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class BannerServiceImpl implements BannerService {
 
-    private final BannerRepository BannerRepository;
-    private final BannerMapper BannerMapper;
+    private final BannerRepository bannerRepository;
+    private final BannerMapper bannerMapper;
 
     @Override
     public Map<String,Object> queryAll(BannerQueryCriteria criteria, Pageable pageable){
-        Page<Banner> page = BannerRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(BannerMapper::toDto));
+        Page<Banner> page = bannerRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(bannerMapper::toDto));
     }
 
     @Override
     public List<BannerDto> queryAll(BannerQueryCriteria criteria){
-        return BannerMapper.toDto(BannerRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return bannerMapper.toDto(bannerRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public BannerDto findById(Long id) {
-        Banner Banner = BannerRepository.findById(id).orElseGet(Banner::new);
-        ValidationUtil.isNull(Banner.getId(),"Banner","id",id);
-        return BannerMapper.toDto(Banner);
+        Banner banner = bannerRepository.findById(id).orElseGet(Banner::new);
+        ValidationUtil.isNull(banner.getId(),"Banner","id",id);
+        return bannerMapper.toDto(banner);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BannerDto create(Banner resources) {
-        return BannerMapper.toDto(BannerRepository.save(resources));
+        return bannerMapper.toDto(bannerRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Banner resources) {
-        Banner Banner = BannerRepository.findById(resources.getId()).orElseGet(Banner::new);
-        ValidationUtil.isNull( Banner.getId(),"Banner","id",resources.getId());
-        BeanUtil.copyProperties(resources, Banner, CopyOptions.create().setIgnoreNullValue(true));
-        BannerRepository.save(Banner);
+        Banner banner = bannerRepository.findById(resources.getId()).orElseGet(Banner::new);
+        ValidationUtil.isNull( banner.getId(),"Banner","id",resources.getId());
+        BeanUtil.copyProperties(resources, banner, CopyOptions.create().setIgnoreNullValue(true));
+        bannerRepository.save(banner);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            BannerRepository.deleteById(id);
+            bannerRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<BannerDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (BannerDto Banner : all) {
+        for (BannerDto banner : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" imageUrl",  Banner.getImageUrl());
-            map.put(" displayIndex",  Banner.getDisplayIndex());
-            map.put(" actionUrl",  Banner.getActionUrl());
-            map.put(" createdAt",  Banner.getCreatedAt());
-            map.put(" updatedAt",  Banner.getUpdatedAt());
+            map.put(" imageUrl",  banner.getImageUrl());
+            map.put(" displayIndex",  banner.getDisplayIndex());
+            map.put(" actionUrl",  banner.getActionUrl());
+            map.put(" createdAt",  banner.getCreatedAt());
+            map.put(" updatedAt",  banner.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

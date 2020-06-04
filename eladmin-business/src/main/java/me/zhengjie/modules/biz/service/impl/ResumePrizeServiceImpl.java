@@ -15,93 +15,92 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.ResumePrize;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.ResumePrizeRepository;
 import me.zhengjie.modules.biz.service.ResumePrizeService;
 import me.zhengjie.modules.biz.service.dto.ResumePrizeDto;
 import me.zhengjie.modules.biz.service.dto.ResumePrizeQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.ResumePrizeMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class ResumePrizeServiceImpl implements ResumePrizeService {
 
-    private final ResumePrizeRepository ResumePrizeRepository;
-    private final ResumePrizeMapper ResumePrizeMapper;
+    private final ResumePrizeRepository resumePrizeRepository;
+    private final ResumePrizeMapper resumePrizeMapper;
 
     @Override
     public Map<String,Object> queryAll(ResumePrizeQueryCriteria criteria, Pageable pageable){
-        Page<ResumePrize> page = ResumePrizeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(ResumePrizeMapper::toDto));
+        Page<ResumePrize> page = resumePrizeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(resumePrizeMapper::toDto));
     }
 
     @Override
     public List<ResumePrizeDto> queryAll(ResumePrizeQueryCriteria criteria){
-        return ResumePrizeMapper.toDto(ResumePrizeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return resumePrizeMapper.toDto(resumePrizeRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public ResumePrizeDto findById(Long id) {
-        ResumePrize ResumePrize = ResumePrizeRepository.findById(id).orElseGet(ResumePrize::new);
-        ValidationUtil.isNull(ResumePrize.getId(),"ResumePrize","id",id);
-        return ResumePrizeMapper.toDto(ResumePrize);
+        ResumePrize resumePrize = resumePrizeRepository.findById(id).orElseGet(ResumePrize::new);
+        ValidationUtil.isNull(resumePrize.getId(),"ResumePrize","id",id);
+        return resumePrizeMapper.toDto(resumePrize);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResumePrizeDto create(ResumePrize resources) {
-        return ResumePrizeMapper.toDto(ResumePrizeRepository.save(resources));
+        return resumePrizeMapper.toDto(resumePrizeRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(ResumePrize resources) {
-        ResumePrize ResumePrize = ResumePrizeRepository.findById(resources.getId()).orElseGet(ResumePrize::new);
-        ValidationUtil.isNull( ResumePrize.getId(),"ResumePrize","id",resources.getId());
-        BeanUtil.copyProperties(resources, ResumePrize, CopyOptions.create().setIgnoreNullValue(true));
-        ResumePrizeRepository.save(ResumePrize);
+        ResumePrize resumePrize = resumePrizeRepository.findById(resources.getId()).orElseGet(ResumePrize::new);
+        ValidationUtil.isNull( resumePrize.getId(),"ResumePrize","id",resources.getId());
+        BeanUtil.copyProperties(resources, resumePrize, CopyOptions.create().setIgnoreNullValue(true));
+        resumePrizeRepository.save(resumePrize);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            ResumePrizeRepository.deleteById(id);
+            resumePrizeRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<ResumePrizeDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (ResumePrizeDto ResumePrize : all) {
+        for (ResumePrizeDto resumePrize : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" resumeId",  ResumePrize.getResumeId());
-            map.put(" prizeName",  ResumePrize.getPrizeName());
-            map.put(" prizeTime",  ResumePrize.getPrizeTime());
+            map.put(" resumeId",  resumePrize.getResumeId());
+            map.put(" prizeName",  resumePrize.getPrizeName());
+            map.put(" prizeTime",  resumePrize.getPrizeTime());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

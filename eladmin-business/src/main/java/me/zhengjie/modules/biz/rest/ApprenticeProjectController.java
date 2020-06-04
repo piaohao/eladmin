@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.ApprenticeProject;
 import me.zhengjie.modules.biz.service.ApprenticeProjectService;
 import me.zhengjie.modules.biz.service.dto.ApprenticeProjectQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "apprentice_project管理")
-@RequestMapping("/api/ApprenticeProject")
+@Api(tags = "ApprenticeProject管理")
+@RequestMapping("/api/apprenticeProject")
 public class ApprenticeProjectController {
 
-    private final ApprenticeProjectService ApprenticeProjectService;
+    private final ApprenticeProjectService apprenticeProjectService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('ApprenticeProject:list')")
+    @PreAuthorize("@el.check('apprenticeProject:list')")
     public void download(HttpServletResponse response, ApprenticeProjectQueryCriteria criteria) throws IOException {
-        ApprenticeProjectService.download(ApprenticeProjectService.queryAll(criteria), response);
+        apprenticeProjectService.download(apprenticeProjectService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询apprentice_project")
-    @ApiOperation("查询apprentice_project")
-    @PreAuthorize("@el.check('ApprenticeProject:list')")
+    @Log("查询ApprenticeProject")
+    @ApiOperation("查询ApprenticeProject")
+    @PreAuthorize("@el.check('apprenticeProject:list')")
     public ResponseEntity<Object> query(ApprenticeProjectQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(ApprenticeProjectService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(apprenticeProjectService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增apprentice_project")
-    @ApiOperation("新增apprentice_project")
-    @PreAuthorize("@el.check('ApprenticeProject:add')")
+    @Log("新增ApprenticeProject")
+    @ApiOperation("新增ApprenticeProject")
+    @PreAuthorize("@el.check('apprenticeProject:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody ApprenticeProject resources){
-        return new ResponseEntity<>(ApprenticeProjectService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(apprenticeProjectService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改apprentice_project")
-    @ApiOperation("修改apprentice_project")
-    @PreAuthorize("@el.check('ApprenticeProject:edit')")
+    @Log("修改ApprenticeProject")
+    @ApiOperation("修改ApprenticeProject")
+    @PreAuthorize("@el.check('apprenticeProject:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody ApprenticeProject resources){
-        ApprenticeProjectService.update(resources);
+        apprenticeProjectService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除apprentice_project")
-    @ApiOperation("删除apprentice_project")
-    @PreAuthorize("@el.check('ApprenticeProject:del')")
+    @Log("删除ApprenticeProject")
+    @ApiOperation("删除ApprenticeProject")
+    @PreAuthorize("@el.check('apprenticeProject:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        ApprenticeProjectService.deleteAll(ids);
+        apprenticeProjectService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

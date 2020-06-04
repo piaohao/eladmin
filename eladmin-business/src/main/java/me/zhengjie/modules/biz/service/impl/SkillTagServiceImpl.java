@@ -15,93 +15,92 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.SkillTag;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.SkillTagRepository;
 import me.zhengjie.modules.biz.service.SkillTagService;
 import me.zhengjie.modules.biz.service.dto.SkillTagDto;
 import me.zhengjie.modules.biz.service.dto.SkillTagQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.SkillTagMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class SkillTagServiceImpl implements SkillTagService {
 
-    private final SkillTagRepository SkillTagRepository;
-    private final SkillTagMapper SkillTagMapper;
+    private final SkillTagRepository skillTagRepository;
+    private final SkillTagMapper skillTagMapper;
 
     @Override
     public Map<String,Object> queryAll(SkillTagQueryCriteria criteria, Pageable pageable){
-        Page<SkillTag> page = SkillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(SkillTagMapper::toDto));
+        Page<SkillTag> page = skillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(skillTagMapper::toDto));
     }
 
     @Override
     public List<SkillTagDto> queryAll(SkillTagQueryCriteria criteria){
-        return SkillTagMapper.toDto(SkillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return skillTagMapper.toDto(skillTagRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public SkillTagDto findById(Long id) {
-        SkillTag SkillTag = SkillTagRepository.findById(id).orElseGet(SkillTag::new);
-        ValidationUtil.isNull(SkillTag.getId(),"SkillTag","id",id);
-        return SkillTagMapper.toDto(SkillTag);
+        SkillTag skillTag = skillTagRepository.findById(id).orElseGet(SkillTag::new);
+        ValidationUtil.isNull(skillTag.getId(),"SkillTag","id",id);
+        return skillTagMapper.toDto(skillTag);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SkillTagDto create(SkillTag resources) {
-        return SkillTagMapper.toDto(SkillTagRepository.save(resources));
+        return skillTagMapper.toDto(skillTagRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SkillTag resources) {
-        SkillTag SkillTag = SkillTagRepository.findById(resources.getId()).orElseGet(SkillTag::new);
-        ValidationUtil.isNull( SkillTag.getId(),"SkillTag","id",resources.getId());
-        BeanUtil.copyProperties(resources, SkillTag, CopyOptions.create().setIgnoreNullValue(true));
-        SkillTagRepository.save(SkillTag);
+        SkillTag skillTag = skillTagRepository.findById(resources.getId()).orElseGet(SkillTag::new);
+        ValidationUtil.isNull( skillTag.getId(),"SkillTag","id",resources.getId());
+        BeanUtil.copyProperties(resources, skillTag, CopyOptions.create().setIgnoreNullValue(true));
+        skillTagRepository.save(skillTag);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            SkillTagRepository.deleteById(id);
+            skillTagRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<SkillTagDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (SkillTagDto SkillTag : all) {
+        for (SkillTagDto skillTag : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" name",  SkillTag.getName());
-            map.put(" createdAt",  SkillTag.getCreatedAt());
-            map.put(" updatedAt",  SkillTag.getUpdatedAt());
+            map.put(" name",  skillTag.getName());
+            map.put(" createdAt",  skillTag.getCreatedAt());
+            map.put(" updatedAt",  skillTag.getUpdatedAt());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

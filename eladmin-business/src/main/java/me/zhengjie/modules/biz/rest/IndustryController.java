@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Industry;
 import me.zhengjie.modules.biz.service.IndustryService;
 import me.zhengjie.modules.biz.service.dto.IndustryQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "industry管理")
-@RequestMapping("/api/Industry")
+@Api(tags = "Industry管理")
+@RequestMapping("/api/industry")
 public class IndustryController {
 
-    private final IndustryService IndustryService;
+    private final IndustryService industryService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Industry:list')")
+    @PreAuthorize("@el.check('industry:list')")
     public void download(HttpServletResponse response, IndustryQueryCriteria criteria) throws IOException {
-        IndustryService.download(IndustryService.queryAll(criteria), response);
+        industryService.download(industryService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询industry")
-    @ApiOperation("查询industry")
-    @PreAuthorize("@el.check('Industry:list')")
+    @Log("查询Industry")
+    @ApiOperation("查询Industry")
+    @PreAuthorize("@el.check('industry:list')")
     public ResponseEntity<Object> query(IndustryQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(IndustryService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(industryService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增industry")
-    @ApiOperation("新增industry")
-    @PreAuthorize("@el.check('Industry:add')")
+    @Log("新增Industry")
+    @ApiOperation("新增Industry")
+    @PreAuthorize("@el.check('industry:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Industry resources){
-        return new ResponseEntity<>(IndustryService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(industryService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改industry")
-    @ApiOperation("修改industry")
-    @PreAuthorize("@el.check('Industry:edit')")
+    @Log("修改Industry")
+    @ApiOperation("修改Industry")
+    @PreAuthorize("@el.check('industry:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Industry resources){
-        IndustryService.update(resources);
+        industryService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除industry")
-    @ApiOperation("删除industry")
-    @PreAuthorize("@el.check('Industry:del')")
+    @Log("删除Industry")
+    @ApiOperation("删除Industry")
+    @PreAuthorize("@el.check('industry:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        IndustryService.deleteAll(ids);
+        industryService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

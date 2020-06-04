@@ -15,8 +15,8 @@
 */
 package me.zhengjie.modules.biz.service.mapstruct;
 
-import me.zhengjie.api.domain.biz.ResumeIntention;
 import me.zhengjie.base.BaseMapper;
+import me.zhengjie.api.domain.biz.ResumeIntention;
 import me.zhengjie.modules.biz.service.dto.ResumeIntentionDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -24,7 +24,7 @@ import org.mapstruct.ReportingPolicy;
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ResumeIntentionMapper extends BaseMapper<ResumeIntentionDto, ResumeIntention> {

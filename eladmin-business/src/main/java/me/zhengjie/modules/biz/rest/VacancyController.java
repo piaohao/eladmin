@@ -15,75 +15,73 @@
 */
 package me.zhengjie.modules.biz.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.api.domain.biz.Vacancy;
 import me.zhengjie.modules.biz.service.VacancyService;
 import me.zhengjie.modules.biz.service.dto.VacancyQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
+import io.swagger.annotations.*;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @website https://el-admin.vip
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "vacancy管理")
-@RequestMapping("/api/Vacancy")
+@Api(tags = "Vacancy管理")
+@RequestMapping("/api/vacancy")
 public class VacancyController {
 
-    private final VacancyService VacancyService;
+    private final VacancyService vacancyService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('Vacancy:list')")
+    @PreAuthorize("@el.check('vacancy:list')")
     public void download(HttpServletResponse response, VacancyQueryCriteria criteria) throws IOException {
-        VacancyService.download(VacancyService.queryAll(criteria), response);
+        vacancyService.download(vacancyService.queryAll(criteria), response);
     }
 
     @GetMapping
-    @Log("查询vacancy")
-    @ApiOperation("查询vacancy")
-    @PreAuthorize("@el.check('Vacancy:list')")
+    @Log("查询Vacancy")
+    @ApiOperation("查询Vacancy")
+    @PreAuthorize("@el.check('vacancy:list')")
     public ResponseEntity<Object> query(VacancyQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(VacancyService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(vacancyService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
-    @Log("新增vacancy")
-    @ApiOperation("新增vacancy")
-    @PreAuthorize("@el.check('Vacancy:add')")
+    @Log("新增Vacancy")
+    @ApiOperation("新增Vacancy")
+    @PreAuthorize("@el.check('vacancy:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Vacancy resources){
-        return new ResponseEntity<>(VacancyService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(vacancyService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Log("修改vacancy")
-    @ApiOperation("修改vacancy")
-    @PreAuthorize("@el.check('Vacancy:edit')")
+    @Log("修改Vacancy")
+    @ApiOperation("修改Vacancy")
+    @PreAuthorize("@el.check('vacancy:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Vacancy resources){
-        VacancyService.update(resources);
+        vacancyService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除vacancy")
-    @ApiOperation("删除vacancy")
-    @PreAuthorize("@el.check('Vacancy:del')")
+    @Log("删除Vacancy")
+    @ApiOperation("删除Vacancy")
+    @PreAuthorize("@el.check('vacancy:del')")
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
-        VacancyService.deleteAll(ids);
+        vacancyService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

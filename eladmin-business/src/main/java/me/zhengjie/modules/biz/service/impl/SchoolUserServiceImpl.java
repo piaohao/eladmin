@@ -15,120 +15,119 @@
 */
 package me.zhengjie.modules.biz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.biz.SchoolUser;
+import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.repository.biz.SchoolUserRepository;
 import me.zhengjie.modules.biz.service.SchoolUserService;
 import me.zhengjie.modules.biz.service.dto.SchoolUserDto;
 import me.zhengjie.modules.biz.service.dto.SchoolUserQueryCriteria;
 import me.zhengjie.modules.biz.service.mapstruct.SchoolUserMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
 * @website https://el-admin.vip
 * @description 服务实现
 * @author piaohao
-* @date 2020-06-03
+* @date 2020-06-04
 **/
 @Service
 @RequiredArgsConstructor
 public class SchoolUserServiceImpl implements SchoolUserService {
 
-    private final SchoolUserRepository SchoolUserRepository;
-    private final SchoolUserMapper SchoolUserMapper;
+    private final SchoolUserRepository schoolUserRepository;
+    private final SchoolUserMapper schoolUserMapper;
 
     @Override
     public Map<String,Object> queryAll(SchoolUserQueryCriteria criteria, Pageable pageable){
-        Page<SchoolUser> page = SchoolUserRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(SchoolUserMapper::toDto));
+        Page<SchoolUser> page = schoolUserRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(schoolUserMapper::toDto));
     }
 
     @Override
     public List<SchoolUserDto> queryAll(SchoolUserQueryCriteria criteria){
-        return SchoolUserMapper.toDto(SchoolUserRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return schoolUserMapper.toDto(schoolUserRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public SchoolUserDto findById(Long id) {
-        SchoolUser SchoolUser = SchoolUserRepository.findById(id).orElseGet(SchoolUser::new);
-        ValidationUtil.isNull(SchoolUser.getId(),"SchoolUser","id",id);
-        return SchoolUserMapper.toDto(SchoolUser);
+        SchoolUser schoolUser = schoolUserRepository.findById(id).orElseGet(SchoolUser::new);
+        ValidationUtil.isNull(schoolUser.getId(),"SchoolUser","id",id);
+        return schoolUserMapper.toDto(schoolUser);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SchoolUserDto create(SchoolUser resources) {
-        return SchoolUserMapper.toDto(SchoolUserRepository.save(resources));
+        return schoolUserMapper.toDto(schoolUserRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SchoolUser resources) {
-        SchoolUser SchoolUser = SchoolUserRepository.findById(resources.getId()).orElseGet(SchoolUser::new);
-        ValidationUtil.isNull( SchoolUser.getId(),"SchoolUser","id",resources.getId());
-        BeanUtil.copyProperties(resources, SchoolUser, CopyOptions.create().setIgnoreNullValue(true));
-        SchoolUserRepository.save(SchoolUser);
+        SchoolUser schoolUser = schoolUserRepository.findById(resources.getId()).orElseGet(SchoolUser::new);
+        ValidationUtil.isNull( schoolUser.getId(),"SchoolUser","id",resources.getId());
+        BeanUtil.copyProperties(resources, schoolUser, CopyOptions.create().setIgnoreNullValue(true));
+        schoolUserRepository.save(schoolUser);
     }
 
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            SchoolUserRepository.deleteById(id);
+            schoolUserRepository.deleteById(id);
         }
     }
 
     @Override
     public void download(List<SchoolUserDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (SchoolUserDto SchoolUser : all) {
+        for (SchoolUserDto schoolUser : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put(" provider",  SchoolUser.getProvider());
-            map.put(" uid",  SchoolUser.getUid());
-            map.put(" encryptedPassword",  SchoolUser.getEncryptedPassword());
-            map.put(" resetPasswordToken",  SchoolUser.getResetPasswordToken());
-            map.put(" resetPasswordSentAt",  SchoolUser.getResetPasswordSentAt());
-            map.put(" allowPasswordChange",  SchoolUser.getAllowPasswordChange());
-            map.put(" rememberCreatedAt",  SchoolUser.getRememberCreatedAt());
-            map.put(" confirmationToken",  SchoolUser.getConfirmationToken());
-            map.put(" confirmedAt",  SchoolUser.getConfirmedAt());
-            map.put(" confirmationSentAt",  SchoolUser.getConfirmationSentAt());
-            map.put(" unconfirmedEmail",  SchoolUser.getUnconfirmedEmail());
-            map.put(" failedAttempts",  SchoolUser.getFailedAttempts());
-            map.put(" unlockToken",  SchoolUser.getUnlockToken());
-            map.put(" lockedAt",  SchoolUser.getLockedAt());
-            map.put(" signInCount",  SchoolUser.getSignInCount());
-            map.put(" currentSignInAt",  SchoolUser.getCurrentSignInAt());
-            map.put(" lastSignInAt",  SchoolUser.getLastSignInAt());
-            map.put(" currentSignInIp",  SchoolUser.getCurrentSignInIp());
-            map.put(" lastSignInIp",  SchoolUser.getLastSignInIp());
-            map.put(" name",  SchoolUser.getName());
-            map.put(" nickname",  SchoolUser.getNickname());
-            map.put(" avatar",  SchoolUser.getAvatar());
-            map.put(" email",  SchoolUser.getEmail());
-            map.put(" mobile",  SchoolUser.getMobile());
-            map.put(" minaOpenid",  SchoolUser.getMinaOpenid());
-            map.put(" wxUnionid",  SchoolUser.getWxUnionid());
-            map.put(" tokens",  SchoolUser.getTokens());
-            map.put(" createdAt",  SchoolUser.getCreatedAt());
-            map.put(" updatedAt",  SchoolUser.getUpdatedAt());
-            map.put(" schoolId",  SchoolUser.getSchoolId());
+            map.put(" provider",  schoolUser.getProvider());
+            map.put(" uid",  schoolUser.getUid());
+            map.put(" encryptedPassword",  schoolUser.getEncryptedPassword());
+            map.put(" resetPasswordToken",  schoolUser.getResetPasswordToken());
+            map.put(" resetPasswordSentAt",  schoolUser.getResetPasswordSentAt());
+            map.put(" allowPasswordChange",  schoolUser.getAllowPasswordChange());
+            map.put(" rememberCreatedAt",  schoolUser.getRememberCreatedAt());
+            map.put(" confirmationToken",  schoolUser.getConfirmationToken());
+            map.put(" confirmedAt",  schoolUser.getConfirmedAt());
+            map.put(" confirmationSentAt",  schoolUser.getConfirmationSentAt());
+            map.put(" unconfirmedEmail",  schoolUser.getUnconfirmedEmail());
+            map.put(" failedAttempts",  schoolUser.getFailedAttempts());
+            map.put(" unlockToken",  schoolUser.getUnlockToken());
+            map.put(" lockedAt",  schoolUser.getLockedAt());
+            map.put(" signInCount",  schoolUser.getSignInCount());
+            map.put(" currentSignInAt",  schoolUser.getCurrentSignInAt());
+            map.put(" lastSignInAt",  schoolUser.getLastSignInAt());
+            map.put(" currentSignInIp",  schoolUser.getCurrentSignInIp());
+            map.put(" lastSignInIp",  schoolUser.getLastSignInIp());
+            map.put(" name",  schoolUser.getName());
+            map.put(" nickname",  schoolUser.getNickname());
+            map.put(" avatar",  schoolUser.getAvatar());
+            map.put(" email",  schoolUser.getEmail());
+            map.put(" mobile",  schoolUser.getMobile());
+            map.put(" minaOpenid",  schoolUser.getMinaOpenid());
+            map.put(" wxUnionid",  schoolUser.getWxUnionid());
+            map.put(" tokens",  schoolUser.getTokens());
+            map.put(" createdAt",  schoolUser.getCreatedAt());
+            map.put(" updatedAt",  schoolUser.getUpdatedAt());
+            map.put(" schoolId",  schoolUser.getSchoolId());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
