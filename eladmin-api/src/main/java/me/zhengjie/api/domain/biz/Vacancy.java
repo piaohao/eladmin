@@ -15,6 +15,8 @@
  */
 package me.zhengjie.api.domain.biz;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -41,7 +43,7 @@ public class Vacancy implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-//    @Column(name = "company_id")
+    //    @Column(name = "company_id")
     @ApiModelProperty(value = "companyId")
     @ManyToOne
     @JoinColumn(name = "company_id")
@@ -86,21 +88,21 @@ public class Vacancy implements Serializable {
     @ApiModelProperty(value = "applyCount")
     private Integer applyCount;
 
-//    @Column(name = "state_id")
+    //    @Column(name = "state_id")
     @ApiModelProperty(value = "stateId")
     @OneToOne
     @JoinColumn(name = "state_id")
     private State state;
 //    private Long stateId;
 
-//    @Column(name = "city_id")
+    //    @Column(name = "city_id")
     @ApiModelProperty(value = "cityId")
     @OneToOne
     @JoinColumn(name = "city_id")
     private City city;
 //    private Long cityId;
 
-//    @Column(name = "district_id")
+    //    @Column(name = "district_id")
     @ApiModelProperty(value = "districtId")
     @OneToOne
     @JoinColumn(name = "district_id")
@@ -115,14 +117,14 @@ public class Vacancy implements Serializable {
     @ApiModelProperty(value = "lng")
     private Double lng;
 
-//    @Column(name = "vcc_type_id")
+    //    @Column(name = "vcc_type_id")
     @ApiModelProperty(value = "vccTypeId")
     @ManyToOne
     @JoinColumn(name = "vcc_type_id")
     private VccType vccType;
 //    private Long vccTypeId;
 
-//    @Column(name = "education_id")
+    //    @Column(name = "education_id")
     @ApiModelProperty(value = "educationId")
     @OneToOne
     @JoinColumn(name = "education_id")
@@ -152,10 +154,11 @@ public class Vacancy implements Serializable {
     @ManyToMany
     @JoinTable(name = "biz_vacancy_skill_tag",
             joinColumns = {@JoinColumn(name = "vacancy_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "skill_tag_id", referencedColumnName = "skill_tag_id")})
+            inverseJoinColumns = {@JoinColumn(name = "skill_tag_id", referencedColumnName = "id")})
     private List<VacancySkillTag> skillTags;
 
     @OneToMany(mappedBy = "vacancy")
+    @JsonIgnoreProperties("vacancy")
     private List<VacancyWorkplace> workplaces;
 
 }

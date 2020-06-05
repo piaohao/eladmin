@@ -16,6 +16,9 @@
 package me.zhengjie.modules.biz.service.dto;
 
 import lombok.Data;
+import me.zhengjie.api.domain.biz.City;
+import me.zhengjie.api.domain.biz.Vacancy;
+
 import java.io.Serializable;
 
 /**
@@ -30,10 +33,10 @@ public class VacancyWorkplaceDto implements Serializable {
     private Long id;
 
     /** 职位id */
-    private Long vacancyId;
+    private Vacancy vacancy;
 
     /** 城市id */
-    private Long cityId;
+    private City city;
 
     /** 地址 */
     private String address;

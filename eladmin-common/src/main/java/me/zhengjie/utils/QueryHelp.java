@@ -18,6 +18,7 @@ package me.zhengjie.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.annotation.DataPermission;
 import me.zhengjie.annotation.Query;
@@ -44,10 +45,10 @@ public class QueryHelp {
             // 获取数据权限
             List<Long> dataScopes = SecurityUtils.getCurrentUserDataScope();
             if(CollectionUtil.isNotEmpty(dataScopes)){
-                if(StringUtils.isNotBlank(permission.joinName()) && StringUtils.isNotBlank(permission.fieldName())) {
+                if(StrUtil.isNotBlank(permission.joinName()) && StrUtil.isNotBlank(permission.fieldName())) {
                     Join join = root.join(permission.joinName(), JoinType.LEFT);
                     list.add(getExpression(permission.fieldName(),join, root).in(dataScopes));
-                } else if (StringUtils.isBlank(permission.joinName()) && StringUtils.isNotBlank(permission.fieldName())) {
+                } else if (StrUtil.isBlank(permission.joinName()) && StrUtil.isNotBlank(permission.fieldName())) {
                     list.add(getExpression(permission.fieldName(),null, root).in(dataScopes));
                 }
             }

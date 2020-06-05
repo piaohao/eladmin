@@ -18,6 +18,7 @@ package me.zhengjie.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.tools.LocalStorage;
 import me.zhengjie.config.FileProperties;
@@ -85,7 +86,7 @@ public class LocalStorageServiceImpl implements LocalStorageService {
             throw new BadRequestException("上传失败");
         }
         try {
-            name = StringUtils.isBlank(name) ? FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename()) : name;
+            name = StrUtil.isBlank(name) ? FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename()) : name;
             LocalStorage localStorage = new LocalStorage(
                     file.getName(),
                     name,

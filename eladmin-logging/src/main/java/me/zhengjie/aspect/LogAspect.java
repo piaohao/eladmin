@@ -15,13 +15,14 @@
  */
 package me.zhengjie.aspect;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.api.domain.logging.Log;
 import me.zhengjie.service.LogService;
 import me.zhengjie.utils.RequestHolder;
 import me.zhengjie.utils.SecurityUtils;
-import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ThrowableUtil;
+import me.zhengjie.utils.Util;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -29,6 +30,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -66,10 +68,10 @@ public class LogAspect {
         Object result;
         currentTime.set(System.currentTimeMillis());
         result = joinPoint.proceed();
-        Log log = new Log("INFO",System.currentTimeMillis() - currentTime.get());
+        Log log = new Log("INFO", System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request),joinPoint, log);
+        logService.save(getUsername(), Util.getBrowser(request), ServletUtil.getClientIP(request), joinPoint, log);
         return result;
     }
 
@@ -77,21 +79,21 @@ public class LogAspect {
      * 配置异常通知
      *
      * @param joinPoint join point for advice
-     * @param e exception
+     * @param e         exception
      */
     @AfterThrowing(pointcut = "logPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        Log log = new Log("ERROR",System.currentTimeMillis() - currentTime.get());
+        Log log = new Log("ERROR", System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
         log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request), (ProceedingJoinPoint)joinPoint, log);
+        logService.save(getUsername(), Util.getBrowser(request), ServletUtil.getClientIP(request), (ProceedingJoinPoint) joinPoint, log);
     }
 
     public String getUsername() {
         try {
             return SecurityUtils.getCurrentUsername();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 开启审计功能 -> @EnableJpaAuditing
+ *
  * @author Zheng Jie
  * @date 2018/11/15 9:20:19
  */
@@ -60,6 +61,7 @@ public class AppRun {
 
     /**
      * 访问首页提示
+     *
      * @return /
      */
     @GetMapping("/")

@@ -15,6 +15,7 @@
  */
 package me.zhengjie.modules.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.system.Menu;
 import me.zhengjie.api.domain.system.Role;
@@ -172,7 +173,7 @@ public class RoleServiceImpl implements RoleService {
         }
         Set<Role> roles = roleRepository.findByUserId(user.getId());
         permissions = roles.stream().flatMap(role -> role.getMenus().stream())
-                .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
+                .filter(menu -> StrUtil.isNotBlank(menu.getPermission()))
                 .map(Menu::getPermission).collect(Collectors.toSet());
         return permissions.stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

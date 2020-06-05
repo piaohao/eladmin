@@ -15,6 +15,7 @@
  */
 package me.zhengjie.modules.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.system.User;
 import me.zhengjie.config.FileProperties;
@@ -173,7 +174,7 @@ public class UserServiceImpl implements UserService {
         user.setAvatarPath(Objects.requireNonNull(file).getPath());
         user.setAvatarName(file.getName());
         userRepository.save(user);
-        if(StringUtils.isNotBlank(oldPath)){
+        if(StrUtil.isNotBlank(oldPath)){
             FileUtil.del(oldPath);
         }
         redisUtils.del("user::username:" + user.getUsername());

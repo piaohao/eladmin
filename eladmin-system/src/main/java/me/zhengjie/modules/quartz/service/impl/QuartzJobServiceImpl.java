@@ -16,6 +16,7 @@
 package me.zhengjie.modules.quartz.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.api.domain.task.QuartzJob;
@@ -91,7 +92,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         if (!CronExpression.isValidExpression(resources.getCronExpression())){
             throw new BadRequestException("cron表达式格式错误");
         }
-        if(StringUtils.isNotBlank(resources.getSubTask())){
+        if(StrUtil.isNotBlank(resources.getSubTask())){
             List<String> tasks = Arrays.asList(resources.getSubTask().split("[,，]"));
             if (tasks.contains(resources.getId().toString())) {
                 throw new BadRequestException("子任务中不能添加当前任务ID");

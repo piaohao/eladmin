@@ -103,7 +103,7 @@ public class LogServiceImpl implements LogService {
                 e.printStackTrace();
             }
         }
-        log.setAddress(StringUtils.getCityInfo(log.getRequestIp()));
+        log.setAddress(Util.getCityInfo(log.getRequestIp()));
         log.setMethod(methodName);
         log.setUsername(username);
         log.setParams(params.toString() + " }");

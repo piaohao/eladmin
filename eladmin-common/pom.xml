@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <properties>
-        <hutool.version>5.3.4</hutool.version>
+
     </properties>
 
     <artifactId>eladmin-common</artifactId>
@@ -21,11 +21,6 @@
             <artifactId>eladmin-api</artifactId>
             <version>2.4</version>
         </dependency>
-        <!--工具包-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
+
     </dependencies>
 </project>

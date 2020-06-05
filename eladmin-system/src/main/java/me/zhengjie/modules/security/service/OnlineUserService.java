@@ -15,11 +15,14 @@
  */
 package me.zhengjie.modules.security.service;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.security.config.SecurityProperties;
 import me.zhengjie.modules.security.service.dto.JwtUserDto;
 import me.zhengjie.modules.security.service.dto.OnlineUserDto;
 import me.zhengjie.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -51,9 +54,9 @@ public class OnlineUserService {
      */
     public void save(JwtUserDto jwtUserDto, String token, HttpServletRequest request){
         String dept = jwtUserDto.getUser().getDept().getName();
-        String ip = StringUtils.getIp(request);
-        String browser = StringUtils.getBrowser(request);
-        String address = StringUtils.getCityInfo(ip);
+        String ip = ServletUtil.getClientIP(request);
+        String browser = Util.getBrowser(request);
+        String address = Util.getCityInfo(ip);
         OnlineUserDto onlineUserDto = null;
         try {
             onlineUserDto = new OnlineUserDto(jwtUserDto.getUsername(), jwtUserDto.getUser().getNickName(), dept, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
@@ -88,7 +91,7 @@ public class OnlineUserService {
         List<OnlineUserDto> onlineUserDtos = new ArrayList<>();
         for (String key : keys) {
             OnlineUserDto onlineUserDto = (OnlineUserDto) redisUtils.get(key);
-            if(StringUtils.isNotBlank(filter)){
+            if(StrUtil.isNotBlank(filter)){
                 if(onlineUserDto.toString().contains(filter)){
                     onlineUserDtos.add(onlineUserDto);
                 }
@@ -161,9 +164,9 @@ public class OnlineUserService {
             if(onlineUserDto.getUserName().equals(userName)){
                 try {
                     String token =EncryptUtils.desDecrypt(onlineUserDto.getKey());
-                    if(StringUtils.isNotBlank(igoreToken)&&!igoreToken.equals(token)){
+                    if(StrUtil.isNotBlank(igoreToken)&&!igoreToken.equals(token)){
                         this.kickOut(token);
-                    }else if(StringUtils.isBlank(igoreToken)){
+                    }else if(StrUtil.isBlank(igoreToken)){
                         this.kickOut(token);
                     }
                 } catch (Exception e) {

@@ -17,6 +17,7 @@ package me.zhengjie.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.generator.ColumnInfo;
@@ -28,7 +29,7 @@ import me.zhengjie.service.GeneratorService;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.GenUtil;
 import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         Query query = em.createNativeQuery(sql);
         query.setFirstResult(startEnd[0]);
         query.setMaxResults(startEnd[1] - startEnd[0]);
-        query.setParameter(1, StringUtils.isNotBlank(name) ? ("%" + name + "%") : "%%");
+        query.setParameter(1, StrUtil.isNotBlank(name) ? ("%" + name + "%") : "%%");
         List result = query.getResultList();
         List<TableInfo> tableInfos = new ArrayList<>();
         for (Object obj : result) {
@@ -141,7 +142,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                 column.setColumnType(columnInfo.getColumnType());
                 column.setExtra(columnInfo.getExtra());
                 column.setKeyType(columnInfo.getKeyType());
-                if (StringUtils.isBlank(column.getRemark())) {
+                if (StrUtil.isBlank(column.getRemark())) {
                     column.setRemark(columnInfo.getRemark());
                 }
                 columnInfoRepository.save(column);

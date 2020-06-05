@@ -15,11 +15,12 @@
  */
 package me.zhengjie.aspect;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.google.common.collect.ImmutableList;
 import me.zhengjie.annotation.Limit;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.utils.RequestHolder;
-import me.zhengjie.utils.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -31,6 +32,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
@@ -41,10 +43,10 @@ import java.lang.reflect.Method;
 @Component
 public class LimitAspect {
 
-    private final RedisTemplate<Object,Object> redisTemplate;
+    private final RedisTemplate<Object, Object> redisTemplate;
     private static final Logger logger = LoggerFactory.getLogger(LimitAspect.class);
 
-    public LimitAspect(RedisTemplate<Object,Object> redisTemplate) {
+    public LimitAspect(RedisTemplate<Object, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -60,15 +62,17 @@ public class LimitAspect {
         Limit limit = signatureMethod.getAnnotation(Limit.class);
         LimitType limitType = limit.limitType();
         String key = limit.key();
-        if (StringUtils.isEmpty(key)) {
+        if (StrUtil.isEmpty(key)) {
             if (limitType == LimitType.IP) {
-                key = StringUtils.getIp(request);
+                key = ServletUtil.getClientIP(request);
             } else {
                 key = signatureMethod.getName();
             }
         }
 
-        ImmutableList<Object> keys = ImmutableList.of(StringUtils.join(limit.prefix(), "_", key, "_", request.getRequestURI().replaceAll("/","_")));
+        ImmutableList<Object> keys = ImmutableList.of(
+                StrUtil.join(limit.prefix(), "_", key, "_", request.getRequestURI().replaceAll("/", "_"))
+        );
 
         String luaScript = buildLuaScript();
         RedisScript<Number> redisScript = new DefaultRedisScript<>(luaScript, Number.class);

@@ -15,11 +15,11 @@
  */
 package me.zhengjie.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.api.domain.generator.GenConfig;
 import me.zhengjie.api.repository.generator.GenConfigRepository;
 import me.zhengjie.service.GenConfigService;
-import me.zhengjie.utils.StringUtils;
 import org.springframework.stereotype.Service;
 import java.io.File;
 
@@ -45,7 +45,7 @@ public class GenConfigServiceImpl implements GenConfigService {
     @Override
     public GenConfig update(String tableName, GenConfig genConfig) {
         // 如果 api 路径为空，则自动生成路径
-        if(StringUtils.isBlank(genConfig.getApiPath())){
+        if(StrUtil.isBlank(genConfig.getApiPath())){
             String separator = File.separator;
             String[] paths;
             String symbol = "\\";

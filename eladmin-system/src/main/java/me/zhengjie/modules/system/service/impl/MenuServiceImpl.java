@@ -33,6 +33,7 @@ import me.zhengjie.modules.system.service.dto.MenuQueryCriteria;
 import me.zhengjie.modules.system.service.dto.RoleSmallDto;
 import me.zhengjie.modules.system.service.mapstruct.MenuMapper;
 import me.zhengjie.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
@@ -108,7 +109,7 @@ public class MenuServiceImpl implements MenuService {
         if(menuRepository.findByTitle(resources.getTitle()) != null){
             throw new EntityExistException(Menu.class,"title",resources.getTitle());
         }
-        if(StringUtils.isNotBlank(resources.getComponentName())){
+        if(StrUtil.isNotBlank(resources.getComponentName())){
             if(menuRepository.findByComponentName(resources.getComponentName()) != null){
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
             }
@@ -158,7 +159,7 @@ public class MenuServiceImpl implements MenuService {
         if(resources.getPid().equals(0L)){
             resources.setPid(null);
         }
-        if(StringUtils.isNotBlank(resources.getComponentName())){
+        if(StrUtil.isNotBlank(resources.getComponentName())){
             menu1 = menuRepository.findByComponentName(resources.getComponentName());
             if(menu1 != null && !menu1.getId().equals(menu.getId())){
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());

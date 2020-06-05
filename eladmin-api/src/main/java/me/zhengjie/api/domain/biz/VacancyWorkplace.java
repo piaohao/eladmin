@@ -15,6 +15,8 @@
  */
 package me.zhengjie.api.domain.biz;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -44,6 +46,7 @@ public class VacancyWorkplace implements Serializable {
     @ApiModelProperty(value = "职位id")
     @ManyToOne
     @JoinColumn(name = "vacancy_id")
+    @JsonIgnoreProperties("workplaces")
     private Vacancy vacancy;
 //    private Long vacancyId;
 
