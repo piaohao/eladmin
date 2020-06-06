@@ -28,7 +28,7 @@ import java.util.List;
  * @author Zheng Jie
  * @date 2019-01-07
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JobRunner implements ApplicationRunner {
 

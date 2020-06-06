@@ -41,7 +41,7 @@ import java.util.*;
  * @date 2019-01-07
  */
 @RequiredArgsConstructor
-@Service(value = "quartzJobService")
+//@Service(value = "quartzJobService")
 public class QuartzJobServiceImpl implements QuartzJobService {
 
     private final QuartzJobRepository quartzJobRepository;

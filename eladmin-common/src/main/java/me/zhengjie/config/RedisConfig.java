@@ -19,6 +19,8 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -70,7 +73,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration() {
-        GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer();
+        MyJackson2JsonRedisSerializer redisSerializer = new MyJackson2JsonRedisSerializer();
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
         configuration = configuration.serializeValuesWith(
                 RedisSerializationContext.SerializationPair
@@ -86,7 +89,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         //序列化
-        GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer();
+        MyJackson2JsonRedisSerializer redisSerializer = new MyJackson2JsonRedisSerializer();
         // value值的序列化采用fastJsonRedisSerializer
         template.setValueSerializer(redisSerializer);
         template.setHashValueSerializer(redisSerializer);

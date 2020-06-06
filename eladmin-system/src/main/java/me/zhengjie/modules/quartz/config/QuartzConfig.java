@@ -29,13 +29,13 @@ import org.springframework.stereotype.Component;
  * @author /
  * @date 2019-01-07
  */
-@Configuration
+//@Configuration
 public class QuartzConfig {
 
 	/**
 	 * 解决Job中注入Spring Bean为null的问题
 	 */
-	@Component("quartzJobFactory")
+//	@Component("quartzJobFactory")
 	public static class QuartzJobFactory extends AdaptableJobFactory {
 
 		private final AutowireCapableBeanFactory capableBeanFactory;
@@ -60,7 +60,7 @@ public class QuartzConfig {
 	 * @return Scheduler
 	 * @throws Exception /
 	 */
-	@Bean(name = "scheduler")
+//	@Bean(name = "scheduler")
 	public Scheduler scheduler(QuartzJobFactory quartzJobFactory) throws Exception {
 		SchedulerFactoryBean factoryBean=new SchedulerFactoryBean();
 		factoryBean.setJobFactory(quartzJobFactory);

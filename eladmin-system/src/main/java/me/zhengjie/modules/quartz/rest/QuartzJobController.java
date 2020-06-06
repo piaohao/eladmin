@@ -39,9 +39,9 @@ import java.util.Set;
  * @date 2019-01-07
  */
 @Slf4j
-@RestController
+//@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/jobs")
+//@RequestMapping("/api/jobs")
 @Api(tags = "系统:定时任务管理")
 public class QuartzJobController {
 

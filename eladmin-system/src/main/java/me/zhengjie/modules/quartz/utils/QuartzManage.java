@@ -30,7 +30,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @date 2019-01-07
  */
 @Slf4j
-@Component
+//@Component
 public class QuartzManage {
 
     private static final String JOB_NAME = "TASK_";

@@ -53,7 +53,6 @@ public class QuartzJob extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "Bean名称")
     private String beanName;
 
-    @NotBlank
     @ApiModelProperty(value = "方法名称")
     private String methodName;
 
