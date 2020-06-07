@@ -16,13 +16,9 @@
 package me.zhengjie.config;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +37,11 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -156,51 +152,6 @@ public class RedisConfig extends CachingConfigurerSupport {
                 log.error("Redis occur handleCacheClearError：", e);
             }
         };
-    }
-
-}
-
-/**
- * Value 序列化
- *
- * @param <T>
- * @author /
- */
-@Slf4j
-class GsonRedisSerializer<T> implements RedisSerializer<T> {
-
-    private final Class<T> clazz;
-    Gson gson = new Gson();
-
-    GsonRedisSerializer(Class<T> clazz) {
-        super();
-        this.clazz = clazz;
-    }
-
-    @Override
-    public byte[] serialize(T t) {
-        if (t == null) {
-            return new byte[0];
-        }
-        JsonObject json = new JsonObject();
-        json.addProperty("@type", t.getClass().getName());
-        json.add("@data", gson.toJsonTree(t));
-        return json.toString().getBytes(CharsetUtil.CHARSET_UTF_8);
-    }
-
-    @Override
-    public T deserialize(byte[] bytes) {
-        if (bytes == null || bytes.length <= 0) {
-            return null;
-        }
-        String str = new String(bytes, StandardCharsets.UTF_8);
-        JsonObject json = gson.fromJson(str, JsonObject.class);
-        String clazz = json.get("@type").getAsString();
-        try {
-            return (T) gson.fromJson(json.get("@data"), Class.forName(clazz));
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
